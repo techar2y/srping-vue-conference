@@ -1,6 +1,6 @@
 <template>
     <div class="edit-form" v-if="!deleted">
-        <h4>Пользователь</h4>
+        <h4>Редактировать пользователя</h4>
         <form v-if="currentUser != null">
             <div class="form-group">
                 <label for="fullName">Полное имя</label>

@@ -3,12 +3,15 @@ package com.arty.simpleCRUD.controllers;
 import com.arty.simpleCRUD.domains.User;
 import com.arty.simpleCRUD.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -18,20 +21,30 @@ public class UserController
     private UserRepository userRepository;
 
     @GetMapping("/users")
-    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String name){
+    public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam(required = false) String searchStr,
+                                                           @RequestParam(defaultValue="0") int page,
+                                                           @RequestParam(defaultValue="3") int pageSize){
         try {
-            List<User> users = new ArrayList<>();
+            //List<User> users = new ArrayList<>();
+            Pageable paging = PageRequest.of(page, pageSize);
 
-            if (name == null || name.length() == 0)
-                userRepository.findAll().forEach(users::add);
+            Page<User> users = null;
+            if (searchStr == null || searchStr.length() == 0)
+                users = userRepository.findAll(paging);
             else
-                userRepository.findUserByLoginContaining(name).forEach(users::add);
+                users = userRepository.findUserByLoginContaining(searchStr, paging);
 
             if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(users, HttpStatus.OK);
+            Map<String, Object> response = new HashMap<>();
+            response.put("users", users.getContent());
+            response.put("currentPage", users.getTotalPages());
+            response.put("totalItems", users.getTotalElements());
+            response.put("totalPages", users.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
