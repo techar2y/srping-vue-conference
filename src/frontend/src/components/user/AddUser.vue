@@ -71,7 +71,7 @@
     import UserDataService from "../../services/UserDataService";
 
     export default {
-        name: "add-user",
+        name: "addUser",
         data() {
             return {
                 currentUser: {

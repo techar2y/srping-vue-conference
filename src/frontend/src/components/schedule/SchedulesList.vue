@@ -47,11 +47,11 @@
                 <input type="text" class="form-control" placeholder="Поиск по заголовку"
                        v-model="searchStr"/>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button"
+                    <b-button class="btn btn-outline-secondary" type="button"
                             @click="searchTitle"
                     >
                         Искать
-                    </button>
+                    </b-button>
                 </div>
             </div>
         </div>
@@ -70,16 +70,16 @@
             </ul>
             <p v-else>Доклады отсутствуют</p>
 
-            <router-link to="/schedules/addSchedule">
-                <button type="button" class="btn btn-sm btn-success" style="margin: 10px 0px">
+            <!--router-link to="/schedules/addSchedule"-->
+                <b-button :to="`/schedules/addSchedule`" class="btn btn-sm btn-success" style="margin: 10px 0px">
                     Добавить доклад
-                </button>
-            </router-link>
-            <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 0px"
+                </b-button>
+            <!--/router-link-->
+            <b-button class="btn btn-sm btn-danger" style="margin: 10px 0px"
                     @click="deleteAllSchedules"
                     v-if="Object.keys(schedules).length !== 0">
                 Очистить весь список
-            </button>
+            </b-button>
         </div>
         <div class="col-md-6">
             <div v-if="currentSchedule">
@@ -99,11 +99,11 @@
                     <label><strong>Аудитория:</strong></label> {{ currentSchedule.room }}
                 </div>
 
-                <router-link v-bind:to="`/schedules/` + currentSchedule.id" >
-                    <button type="button" class="btn btn-sm btn-warning" style="margin: 10px 0px">
+                <!--router-link v-bind:ton-s="`/schedules/` + currentSchedule.id" -->
+                    <b-button v-bind:to="`/schedules/` + currentSchedule.id" class="btn btm btn-warning" style="margin: 10px 0px">
                         Редактировать
-                    </button>
-                </router-link>
+                    </b-button>
+                <!--/router-link-->
             </div>
             <div v-else>
                 <br/>

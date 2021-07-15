@@ -60,15 +60,15 @@
             </div>
         </form>
 
-        <button type="button" @click="updateSchedule(currentSchedule.id, currentSchedule)"
+        <b-button type="button" @click="updateSchedule(currentSchedule.id, currentSchedule)"
                 class="btn btn-success btn-sm" style="margin: 5px 5px 5px 0px">
             Обновить
-        </button>
+        </b-button>
 
-        <button type="button" @click="deleteSchedule(currentSchedule.id)"
+        <b-button type="button" @click="deleteSchedule(currentSchedule.id)"
                 class="btn btn-danger btn-sm" style="margin: 5px 5px 5px 0px">
             Удалить
-        </button>
+        </b-button>
 
     </div>
 
@@ -77,9 +77,9 @@
     <p v-if="updated">Доклад успешно обновлён</p>
 
     <div>
-        <router-link to="/schedules" class="nav-link">
-            <button type="button" class="btn btn-link">Вернуться к списку докладов</button>
-        </router-link>
+        <!--router-link to="/schedules" class="nav-link"-->
+            <b-button to="/schedules" type="button" class="btn btn-link">Вернуться к списку докладов</b-button>
+        <!--/router-link-->
     </div>
 </template>
 
@@ -127,6 +127,8 @@
             }
         },
         mounted() {
+            console.log(this.$route.params.id);
+            console.log(this.$route.params);
             this.getSchedule(this.$route.params.id);
         }
     }

@@ -63,7 +63,8 @@ export default new Router({
         },
         {
             path: "/schedules/addSchedule",
-            name: "add-schedule",
+            alias: "/schedules/addSchedule",
+            name: "addSchedule",
             component: () => import("./components/schedule/AddSchedule")
         },
         {
@@ -79,7 +80,7 @@ export default new Router({
         },
         {
             path: "/users/addUser",
-            name: "add-user",
+            name: "addUser",
             component: () => import("./components/user/AddUser")
         }
     ]

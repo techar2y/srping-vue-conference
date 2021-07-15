@@ -58,19 +58,19 @@
                 />
             </div>
 
-            <button type="button" class="btn btn-success" style="margin: 10px 0px"
-                    @click="saveSchedule">Добавить</button>
+            <b-button type="button" class="btn btn-success" style="margin: 10px 0px"
+                    @click="saveSchedule">Добавить</b-button>
         </div>
 
         <div v-else>
             <h4>Доклад успешно добавлен!</h4>
-            <button type="button" class="btn btn-success" @click="newSchedule">Добавить ещё</button>
+            <b-button type="button" class="btn btn-success" @click="newSchedule">Добавить ещё</b-button>
         </div>
 
         <div>
-            <router-link to="/schedules" class="nav-link">
-                <button type="button" class="btn btn-link">Вернуться к списку докладов</button>
-            </router-link>
+            <!--router-link to="/schedules" class="nav-link"-->
+                <b-button to="/schedules" type="button" class="btn btn-link">Вернуться к списку докладов</b-button>
+            <!--/router-link-->
         </div>
     </div>
 
@@ -81,7 +81,7 @@
     import ScheduleDataService from "../../services/ScheduleDataService";
 
     export default {
-        name: "add-schedule",
+        name: "addSchedule",
         data() {
             return {
                 schedule: {
