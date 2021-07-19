@@ -70,11 +70,11 @@
             </ul>
             <p v-else>Доклады отсутствуют</p>
 
-            <!--router-link to="/schedules/addSchedule"-->
-                <b-button :to="`/schedules/addSchedule`" class="btn btn-sm btn-success" style="margin: 10px 0px">
+            <router-link to="/addSchedule">
+                <button class="btn btn-sm btn-success" style="margin: 10px 0px">
                     Добавить доклад
-                </b-button>
-            <!--/router-link-->
+                </button>
+            </router-link>
             <b-button class="btn btn-sm btn-danger" style="margin: 10px 0px"
                     @click="deleteAllSchedules"
                     v-if="Object.keys(schedules).length !== 0">
@@ -99,11 +99,11 @@
                     <label><strong>Аудитория:</strong></label> {{ currentSchedule.room }}
                 </div>
 
-                <!--router-link v-bind:ton-s="`/schedules/` + currentSchedule.id" -->
-                    <b-button v-bind:to="`/schedules/` + currentSchedule.id" class="btn btm btn-warning" style="margin: 10px 0px">
+                <router-link v-bind:to="`/schedules/` + currentSchedule.id">
+                    <button class="btn btm btn-warning" style="margin: 10px 0px">
                         Редактировать
-                    </b-button>
-                <!--/router-link-->
+                    </button>
+                </router-link>
             </div>
             <div v-else>
                 <br/>

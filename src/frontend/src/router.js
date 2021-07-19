@@ -62,8 +62,7 @@ export default new Router({
             component: () => import("./components/schedule/Schedule")
         },
         {
-            path: "/schedules/addSchedule",
-            alias: "/schedules/addSchedule",
+            path: "/addSchedule",
             name: "addSchedule",
             component: () => import("./components/schedule/AddSchedule")
         },
@@ -79,9 +78,27 @@ export default new Router({
             component: () => import("./components/user/User")
         },
         {
-            path: "/users/addUser",
+            path: "/addUser",
             name: "addUser",
             component: () => import("./components/user/AddUser")
+        },
+
+
+        {
+            path: "/",
+            alias: "/tutorials",
+            name: "tutorials",
+            component: () => import("./components/tutorials/TutorialsList")
+        },
+        {
+            path: "/tutorials/:id",
+            name: "tutorial-details",
+            component: () => import("./components/tutorials/Tutorial")
+        },
+        {
+            path: "/add",
+            name: "add",
+            component: () => import("./components/tutorials/AddTutorial")
         }
     ]
 });

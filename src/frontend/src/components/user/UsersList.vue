@@ -51,11 +51,11 @@
             </ul>
             <p v-else>Пользователи отсутствуют</p>
 
-            <router-link to="/users/addUser">
-                <button type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
+            <!--router-link to="/addUser"-->
+                <b-button to="/addUser" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
                     Добавить пользователя
-                </button>
-            </router-link>
+                </b-button>
+            <!--/router-link-->
             <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 5px 0px"
                     @click="deleteAllUsers"
                     v-if="Object.keys(users).length !== 0">
