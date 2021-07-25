@@ -2,6 +2,16 @@
     <div class="submit-form">
         <div v-if="!submitted">
             <div class="form-group">
+                <label>Дата</label>
+                <b-form-datepicker
+                        id="date" v-model="schedule.date" class="mb-2"
+                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                        locale="ru">
+                </b-form-datepicker>
+                <p>{{ schedule.date }}</p>
+            </div>
+
+            <!--div class="form-group">
                 <label for="date">Дата</label>
                 <input
                         type="text"
@@ -11,7 +21,7 @@
                         v-model="schedule.date"
                         name="date"
                 />
-            </div>
+            </div-->
 
             <div class="form-group">
                 <label for="name">Наименование доклада</label>
@@ -59,7 +69,8 @@
             </div>
 
             <b-button type="button" class="btn btn-success" style="margin: 10px 0px"
-                    @click="saveSchedule">Добавить</b-button>
+                    @click="saveSchedule">Добавить
+            </b-button>
         </div>
 
         <div v-else>

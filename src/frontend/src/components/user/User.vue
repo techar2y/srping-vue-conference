@@ -3,15 +3,22 @@
         <h4>Редактировать пользователя</h4>
         <form v-if="currentUser != null">
             <div class="form-group">
-                <label for="fullName">Полное имя</label>
-                <input
+                <label>Полное имя</label>
+                <b-form-input
                         type="text"
                         class="form-control"
-                        id="fullName"
                         required
                         v-model="currentUser.fullName"
+                        placeholder="Peter Parker"
                         name="fullName"
-                />
+                        id="fullName"
+                        :state="fullNameValidation()">
+                </b-form-input>
+                <b-form-invalid-feedback :state="validation" id="fullNameInvalidFeedback">
+                    {{ validationInfo }}
+                </b-form-invalid-feedback>
+                <b-form-valid-feedback :state="validation" id="fullNameValidFeedback">
+                </b-form-valid-feedback>
             </div>
 
             <div class="form-group">
@@ -23,6 +30,7 @@
                         required
                         v-model="currentUser.login"
                         name="login"
+                        placeholder="user's login"
                 />
             </div>
 
@@ -34,6 +42,7 @@
                         required
                         v-model="currentUser.email"
                         name="email"
+                        placeholder="example@post.com"
                 />
             </div>
 
@@ -45,6 +54,7 @@
                         required
                         v-model="currentUser.role"
                         name="role"
+                        placeholder="USER"
                 />
             </div>
 
@@ -82,7 +92,8 @@
             return {
                 currentUser: null,
                 deleted: false,
-                updated: false
+                updated: false,
+                validationInfo: ""
             };
         },
         methods: {
@@ -114,11 +125,43 @@
                     .catch(error => {
                         console.log(error);
                     });
+            },
+            fullNameValidation() {
+
+                if (this.currentUser.fullName.length < 1
+                    || this.currentUser.fullName.length > 128) {
+                    this.validationInfo = "Поле обязательное к заполнению";
+                    return false;
+                }
+
+                if (!/^[a-zA-Z\s]+$/.test(this.currentUser.fullName)) {
+                    this.validationInfo = "Имя не должно содержать числа и специальные символы";
+                    return false;
+                }
+
+                return true;
             }
         },
         mounted() {
             this.getUserById(this.$route.params.id);
         }
+        /*computed: {
+            fullNameValidation() {
+
+                    if (this.currentUser.fullName.length < 1
+                        || this.currentUser.fullName.length > 128) {
+                        this.validationInfo = "Поле обязательное к заполнению";
+                        return false;
+                    }
+
+                    if (!/^[a-zA-Z\s]+$/.test(this.currentUser.fullName)) {
+                        //this.validationInfo = "Имя не должно содержать числа и специальные символы";
+                        return false;
+                    }
+
+                    return true;
+                }
+        }*/
     }
 </script>
 

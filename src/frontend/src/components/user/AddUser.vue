@@ -11,6 +11,7 @@
                         required
                         v-model="currentUser.fullName"
                         name="fullName"
+                        placeholder="Peter Parker"
                 />
             </div>
 
@@ -23,6 +24,7 @@
                         required
                         v-model="currentUser.login"
                         name="login"
+                        placeholder="user's login"
                 />
             </div>
 
@@ -34,6 +36,7 @@
                         required
                         v-model="currentUser.email"
                         name="email"
+                        placeholder="example@post.com"
                 />
             </div>
 
@@ -45,6 +48,7 @@
                         required
                         v-model="currentUser.role"
                         name="role"
+                        placeholder="USER"
                 />
             </div>
 

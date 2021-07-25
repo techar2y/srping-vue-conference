@@ -13,8 +13,8 @@ class UserDataService {
         return http.post("/users", data);
     }
 
-    findUserByLogin(title) {
-        return http.get(`/users?title=${title}`);
+    findUserByLogin(searchStr) {
+        return http.get(`/users?searchStr=${searchStr}`);
     }
 
     deleteAllUsers() {

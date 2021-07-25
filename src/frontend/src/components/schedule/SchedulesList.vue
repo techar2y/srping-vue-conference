@@ -1,45 +1,4 @@
 <template>
-    <!--div class="container">
-        <h2>Расписание докладов</h2>
-        <div class="row">
-            <div class="col">
-                ID
-            </div>
-            <div class="col">
-                Дата
-            </div>
-            <div class="col">
-                Предмет
-            </div>
-            <div class="col">
-                Описание
-            </div>
-            <div class="col">
-                Аудитория
-            </div>
-            <div class="col">
-                Действие
-            </div>
-        </div>
-
-        <div class="row" v-for="schedule in schedules" v-bind:key="schedule.id">
-            <div class="col" v-for="element in schedule" v-bind:key="element.id"> {{ element }}</div>
-            <div class="col">
-                <button type="button" class="btn btn-primary btn-sm">
-                    <i class="bi bi-cloud-upload-fill"></i> Редактировать
-                </button>
-                <button type="button" class="btn btn-danger btn-sm">
-                    <i class="bi bi-cloud-upload-fill"></i> Удалить
-                </button>
-            </div>
-        </div>
-        <router-link to="/schedules/addSchedule" class="nav-link">
-            <button type="button" class="btn btn-success">
-                <i class="bi bi-cloud-upload-fill"></i>
-                Добавить
-            </button>
-        </router-link>
-    </div-->
 
     <div class="list row">
         <div class="col-md-8">
@@ -47,7 +6,7 @@
                 <input type="text" class="form-control" placeholder="Поиск по заголовку"
                        v-model="searchStr"/>
                 <div class="input-group-append">
-                    <b-button class="btn btn-outline-secondary" type="button"
+                    <b-button variant="outline-info"
                             @click="searchTitle"
                     >
                         Искать

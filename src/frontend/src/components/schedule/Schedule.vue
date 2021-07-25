@@ -3,15 +3,12 @@
         <h4>Доклад</h4>
         <form v-if="currentSchedule != null">
             <div class="form-group">
-                <label for="date">Дата</label>
-                <input
-                        type="text"
-                        class="form-control"
-                        id="date"
-                        required
-                        v-model="currentSchedule.date"
-                        name="date"
-                />
+                <label>Дата</label>
+                <b-form-datepicker
+                        id="date" v-model="currentSchedule.date" class="mb-2"
+                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                        locale="ru">
+                </b-form-datepicker>
             </div>
 
             <div class="form-group">

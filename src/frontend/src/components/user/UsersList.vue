@@ -1,16 +1,11 @@
 <template>
     <div class="list row">
-
         <div class="col-md-8">
             <div class="input-group mb-3">
-                <input type="text" class="form-control" placeholder="Поиск по логину"
-                       v-model="searchStr" style="margin-right: 10px"/>
+                <b-form-input id="input-1" v-model="searchStr" placeholder="Поиск по логину">
+                </b-form-input>
                 <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="button"
-                            @click="searchUser"
-                    >
-                        Искать
-                    </button>
+                    <b-button variant="outline-info" @click="searchUser">Искать</b-button>
                 </div>
             </div>
         </div>
@@ -52,9 +47,9 @@
             <p v-else>Пользователи отсутствуют</p>
 
             <!--router-link to="/addUser"-->
-                <b-button to="/addUser" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
-                    Добавить пользователя
-                </b-button>
+            <b-button to="/addUser" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
+                Добавить пользователя
+            </b-button>
             <!--/router-link-->
             <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 5px 0px"
                     @click="deleteAllUsers"
@@ -103,7 +98,7 @@
         name: "users-list",
         data() {
             return {
-                users: {},
+                users: [],
                 currentUser: null,
                 currentIndex: -1,
                 searchStr: "",
@@ -130,9 +125,15 @@
             },
             searchUser() {
                 UserDataService.findUserByLogin(this.searchStr)
-                    .then(response => {
-                        this.users = response.data;
-                        this.setActiveUser(null);
+                    .then((response) => {
+                        /*console.log(response);
+                        console.log(response.data.users.length);*/
+                        this.users = [];
+                        if (typeof response.data.users !== "undefined")
+                            this.users = response.data.users;
+                        //this.count = response.data.totalItems;
+                        //console.log(response.data.users);
+                        //this.setActiveUser(null);
                     })
                     .catch(e => {
                         console.log(e);
