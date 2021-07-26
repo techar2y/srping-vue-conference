@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -115,6 +116,17 @@ public class UserController
             }
 
             return new ResponseEntity<>(newUser, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/users/isLoginUnique")
+    public ResponseEntity<Integer> isLoginUnique(@RequestParam String login) {
+        try {
+            List<User> users = userRepository.getUsersByLogin(login);
+
+            return new ResponseEntity<>(users.size(), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

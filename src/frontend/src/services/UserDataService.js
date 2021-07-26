@@ -28,6 +28,10 @@ class UserDataService {
     update(id, user) {
         return http.put(`/users/${id}`, user);
     }
+
+    isLoginUnique(login) {
+        return http.get(`/users/isLoginUnique?login=${login}`);
+    }
 }
 
 export default new UserDataService()

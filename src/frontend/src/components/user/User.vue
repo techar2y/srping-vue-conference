@@ -22,8 +22,8 @@
             </div>
 
             <div class="form-group">
-                <label for="login">Логин</label>
-                <input
+                <label>Логин</label>
+                <b-form-input
                         type="text"
                         class="form-control"
                         id="login"
@@ -31,7 +31,14 @@
                         v-model="currentUser.login"
                         name="login"
                         placeholder="user's login"
-                />
+                        :state="validationLoginInfo.value" @input="validateLogin">
+                </b-form-input>
+                <b-form-invalid-feedback :state="validationLoginInfo.value" id="loginInvalidFeedback">
+                    {{ validationLoginInfo.invalid }}
+                </b-form-invalid-feedback>
+                <b-form-valid-feedback :state="validationLoginInfo.value" id="loginValidFeedback">
+                    {{ validationLoginInfo.valid }}
+                </b-form-valid-feedback>
             </div>
 
             <div class="form-group">
@@ -93,7 +100,13 @@
                 currentUser: null,
                 deleted: false,
                 updated: false,
-                validationInfo: ""
+                validationInfo: "",
+                validationLoginInfo: {
+                    valid: "",
+                    invalid: "",
+                    value: false
+                },
+                serversValidation: false
             };
         },
         methods: {
@@ -140,27 +153,72 @@
                 }
 
                 return true;
+            }/*,
+            async validateLogin() {
+                const promise = await new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve(1);
+                    }, 300);
+                });
+
+                if (promise.data > 0)
+                    return false;
+                else
+                    return true;
+            }*/
+
+            ,
+            async validateLogin() {
+                /*let promise = await UserDataService.isLoginUnique(this.currentUser.login);
+                console.log(promise);
+                if(promise.data > 0) {
+                    this.serversValidation = false;
+                } else
+                    this.serversValidation =  true;
+
+            } catch(error) {
+                console.log(error);
+            }*/
+                UserDataService.isLoginUnique(this.currentUser.login)
+                    .then(response => {
+                        console.log(response.data);
+                        if (this.currentUser.login > 64) {
+                            this.validationLoginInfo.invalid = "Логин не может превышать 64 символа";
+                            this.validationLoginInfo.value = false;
+                            return;
+                        }
+
+                        if (response.data > 0) {
+                            this.validationLoginInfo.invalid = "Такой логин уже занят";
+                            this.validationLoginInfo.value = false;
+                            return;
+                        }
+
+                        this.validationLoginInfo.valid = "Корректиный логин";
+                        this.validationLoginInfo.value = true;
+                    })
+                    .catch(error => {
+                        console.log(error);
+                        return false;
+                    })
             }
         },
         mounted() {
             this.getUserById(this.$route.params.id);
-        }
-        /*computed: {
-            fullNameValidation() {
+        }/*,
+        computed: {
+            validateLogin: async function() {
+                const promise = await new Promise((resolve, reject) => {
+                    setTimeout(() => {
+                        resolve(1);
+                    }, 300);
+                });
 
-                    if (this.currentUser.fullName.length < 1
-                        || this.currentUser.fullName.length > 128) {
-                        this.validationInfo = "Поле обязательное к заполнению";
-                        return false;
-                    }
-
-                    if (!/^[a-zA-Z\s]+$/.test(this.currentUser.fullName)) {
-                        //this.validationInfo = "Имя не должно содержать числа и специальные символы";
-                        return false;
-                    }
-
+                if (promise.data > 0)
+                    return false;
+                 else
                     return true;
-                }
+            }
         }*/
     }
 </script>
