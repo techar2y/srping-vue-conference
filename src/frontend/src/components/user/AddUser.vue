@@ -41,15 +41,25 @@
             </div>
 
             <div class="form-group">
-                <label for="role">Статус</label>
-                <input
+                <label>Статус</label>
+                <b-form-select
                         class="form-control"
                         id="role"
                         required
                         v-model="currentUser.role"
+                        :options="roles"
+                        :state="validationRoleInfo.value"
                         name="role"
-                        placeholder="USER"
-                />
+                        placeholder="user's role"
+                        @input="validateRole">
+                </b-form-select>
+                <!--p> {{ currentUser.role }}</p-->
+                <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
+                    {{ validationRoleInfo.invalid }}
+                </b-form-invalid-feedback>
+                <b-form-valid-feedback :state="validationRoleInfo.value" id="roleValidFeedback">
+                    {{ validationRoleInfo.valid }}
+                </b-form-valid-feedback>
             </div>
 
             <button type="button" class="btn btn-success" style="margin: 10px 0px"
@@ -73,23 +83,33 @@
 
 <script>
     import UserDataService from "../../services/UserDataService";
+    import RoleDataService from "../../services/RoleDataService";
 
     export default {
         name: "addUser",
         data() {
             return {
                 currentUser: {
-                    id: null,
+                    id: -1,
                     fullName: "",
-                    email: "",
                     login: "",
+                    email: "",
                     role: ""
                 },
-                submitted: false
+                roles: {},
+                submitted: false,
+                validationRoleInfo: {
+                    valid: "",
+                    invalid: "",
+                    value: false
+                }
             }
         },
         methods: {
             saveUser() {
+                console.log(this.roles[this.currentUser.role]);
+                this.currentUser.role = this.roles[this.currentUser.role];
+                this.currentUser.role = { id: 1, status: "ADMIN" }
                 UserDataService.saveUser(this.currentUser)
                     .then(result => {
                         this.currentUser.id = result.data;
@@ -102,7 +122,41 @@
             newUser() {
                 this.submitted = false;
                 this.currentUser = {};
+            },
+            getRoles() {
+                return new Promise((resolve, reject) => {
+                    RoleDataService.getAllRoles()
+                        .then(result => {
+                            this.roles = result.data;
+                            this.roles.forEach(obj => {
+                                obj.value = obj.id;
+                                delete obj.id;
+                                obj.text = obj.status;
+                                delete obj.status;
+                            });
+                            resolve(this.roles);
+                        })
+                        .catch(error => {
+                            console.log(error);
+                            reject(error);
+                        })
+                })
+            },
+            validateRole() {
+                if(this.currentUser ===  null)
+                    return;
+
+                if(this.currentUser.role == null) {
+                    this.validationRoleInfo.invalid = true;
+                    return;
+                }
             }
+        },
+        async mounted() {
+            await this.getRoles();
+            /*this.validateLogin();
+            this.validateEmail();*/
+            this.validateRole();
         }
     }
 </script>

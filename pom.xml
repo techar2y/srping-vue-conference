@@ -24,6 +24,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <version>2.4.0</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-core -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>5.4.30.Final</version>
         </dependency>
 
         <dependency>
@@ -31,6 +38,10 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -52,7 +63,7 @@
                 <version>1.7.6</version>
 
                 <executions>
-                    <execution>
+                    <!--execution>
                         <id>Install node and npm</id>
                         <goals>
                             <goal>install-node-and-npm</goal>
@@ -62,9 +73,9 @@
                             <nodeVersion>${node.version}</nodeVersion>
                             <npmVersion>${npm.version}</npmVersion>
                         </configuration>
-                    </execution>
+                    </execution-->
 
-                    <execution>
+                    <!--execution>
                         <id>npm install</id>
                         <goals>
                             <goal>npm</goal>
@@ -73,7 +84,7 @@
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
-                    </execution>
+                    </execution-->
 
                     <execution>
                         <id>npm build</id>

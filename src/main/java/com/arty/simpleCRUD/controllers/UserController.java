@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @RequestMapping("/api")
 public class UserController
@@ -64,10 +65,7 @@ public class UserController
     @PostMapping("/users")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try {
-            User _user = userRepository.save(new User(
-                   user.getFullName(), user.getLogin(),
-                    user.getEmail(), user.getRole()
-            ));
+            User _user = userRepository.save(user);
             return new ResponseEntity<>(_user, HttpStatus.CREATED);
         } catch(Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -122,9 +120,20 @@ public class UserController
     }
 
     @GetMapping("/users/isLoginUnique")
-    public ResponseEntity<Integer> isLoginUnique(@RequestParam String login) {
+    public ResponseEntity<Integer> isLoginUnique(@RequestParam String login, @RequestParam Long id) {
         try {
-            List<User> users = userRepository.getUsersByLogin(login);
+            List<User> users = userRepository.findUsersByLoginAndIdNot(login, id);
+
+            return new ResponseEntity<>(users.size(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/users/isEmailUnique")
+    public ResponseEntity<Integer> isEmailUnique(@RequestParam String email, @RequestParam Long id) {
+        try {
+            List<User> users = userRepository.findUsersByEmailAndIdNot(email, id);
 
             return new ResponseEntity<>(users.size(), HttpStatus.OK);
         } catch (Exception e) {

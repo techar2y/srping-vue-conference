@@ -73,7 +73,7 @@
                     <label><strong>Логин:</strong></label> {{ currentUser.login }}
                 </div>
                 <div>
-                    <label><strong>Статус:</strong></label> {{ currentUser.role }}
+                    <label><strong>Статус:</strong></label> {{ currentUser.role.status }}
                 </div>
 
                 <!--router-link v-bind:to="`/users/` + currentUser.id"-->
@@ -115,9 +115,14 @@
                 let params = this.getRequestParams(this.searchStr, this.page, this.pageSize);
                 UserDataService.getAllUsers(params)
                     .then(result => {
-                        console.log(result.data);
-                        this.users = result.data.users;
-                        this.count = result.data.totalItems;
+                        if(typeof result.data === 'undefined')
+                            return;
+                        this.users = typeof result.data.users !== 'undefined' ? result.data.users : {};
+                        this.totalItem = typeof result.data.totalItem !== 'undefined' ?
+                            result.data.totaItem : 0;
+
+                        console.log(this.users);
+                        console.log(this.totalItem);
                     })
                     .catch(e => {
                         console.log(e);

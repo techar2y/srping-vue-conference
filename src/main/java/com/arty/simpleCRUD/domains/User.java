@@ -1,5 +1,6 @@
 package com.arty.simpleCRUD.domains;
 
+import com.arty.simpleCRUD.domains.Company;
 import javax.persistence.*;
 
 @Entity
@@ -7,7 +8,7 @@ import javax.persistence.*;
 public class User
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String fullName;
@@ -16,14 +17,18 @@ public class User
 
     private String email;
 
-    private String role;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    //private String role;
 
     public User()
     {
 
     }
 
-    public User(String fullName, String login, String email, String role)
+    public User(String fullName, String login, String email, Role role)
     {
         this.fullName = fullName;
         this.login = login;
@@ -71,12 +76,12 @@ public class User
         this.email = email;
     }
 
-    public String getRole ()
+    public Role getRole()
     {
         return role;
     }
 
-    public void setRole (String role)
+    public void setRole(Role role)
     {
         this.role = role;
     }
