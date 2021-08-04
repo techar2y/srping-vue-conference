@@ -4,7 +4,7 @@
             <router-link to="/" class="navbar-brand">bezKoder</router-link>
             <div class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <router-link to="/schedules" class="nav-link">Доклады</router-link>
+                    <router-link to="/presentations" class="nav-link">Доклады</router-link>
                 </li>
                 <li class="nav-item">
                     <router-link to="/users" class="nav-link">Пользователи</router-link>

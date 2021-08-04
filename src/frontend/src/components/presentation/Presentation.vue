@@ -69,19 +69,17 @@
 
     </div>
 
-    <p v-else-if="deleted">Доклад успешно удалён</p>
+    <!--p v-else-if="deleted">Доклад успешно удалён</p>
 
     <p v-if="updated">Доклад успешно обновлён</p>
 
     <div>
-        <!--router-link to="/schedules" class="nav-link"-->
             <b-button to="/schedules" type="button" class="btn btn-link">Вернуться к списку докладов</b-button>
-        <!--/router-link-->
-    </div>
+    </div-->
 </template>
 
 <script>
-    import ScheduleDataService from "../../services/ScheduleDataService";
+    import ScheduleDataService from "../../services/PresentationDataService";
 
     export default {
         name: "schedule-details",

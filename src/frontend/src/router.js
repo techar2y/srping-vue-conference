@@ -51,20 +51,20 @@ export default new Router({
     mode: "history",
     routes: [
         {
-            path: "/schedules",
-            alias: "/schedules",
-            name: "schedules",
-            component: () => import("./components/schedule/SchedulesList")
+            path: "/presentation",
+            alias: "/presentations",
+            name: "presentations",
+            component: () => import("./components/presentation/PresentationsList")
         },
         {
-            path: "/schedules/:id",
-            name: "schedule-details",
-            component: () => import("./components/schedule/Schedule")
+            path: "/presentations/:id",
+            name: "presentation-details",
+            component: () => import("./components/presentation/Presentation")
         },
         {
-            path: "/addSchedule",
-            name: "addSchedule",
-            component: () => import("./components/schedule/AddSchedule")
+            path: "/addPresentation",
+            name: "addPresentation",
+            component: () => import("./components/presentation/AddPresentation")
         },
         {
             path: "/users",

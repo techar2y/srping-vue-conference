@@ -27,7 +27,6 @@ public class UserController
                                                            @RequestParam(defaultValue="0") int page,
                                                            @RequestParam(defaultValue="3") int pageSize){
         try {
-            //List<User> users = new ArrayList<>();
             Pageable paging = PageRequest.of(page, pageSize);
 
             Page<User> users = null;

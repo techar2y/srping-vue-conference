@@ -225,63 +225,37 @@
                     || this.currentUser.fullName.length > 128) {
                     this.validationFullNameInfo.invalid = "Поле обязательное к заполнению";
                     this.validationFullNameInfo.value = false;
-                    return;
+                    return this.validationFullNameInfo.value;
                 } else if (!/^[a-zA-Z\s]+$/.test(this.currentUser.fullName)) {
                     this.validationFullNameInfo.invalid = "Имя не должно содержать числа и специальные символы";
                     this.validationFullNameInfo.value = false;
-                    return;
+                    return this.validationFullNameInfo.value;
                 } else
                     this.validationFullNameInfo.value = true;
-            }/*,
+            },
             async validateLogin() {
-                const promise = await new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve(1);
-                    }, 300);
-                });
-
-                if (promise.data > 0)
-                    return false;
-                else
-                    return true;
-            }*/
-
-            ,
-            async validateLogin() {
-                /*let promise = await UserDataService.isLoginUnique(this.currentUser.login);
-                console.log(promise);
-                if(promise.data > 0) {
-                    this.serversValidation = false;
-                } else
-                    this.serversValidation =  true;
-
-            } catch(error) {
-                console.log(error);
-            }*/
-                if (this.currentUser.login < 3) {
+                if (this.currentUser.login.length < 2) {
                     this.validationLoginInfo.invalid = "Логин не может стостоять меньше чем из двух символов";
                     this.validationLoginInfo.value = false;
-                    return;
+                    return this.validationLoginInfo.value;
                 }
 
-                if (this.currentUser.login > 64) {
+                if (this.currentUser.login.length > 64) {
                     this.validationLoginInfo.invalid = "Логин не может превышать 64 символа";
                     this.validationLoginInfo.value = false;
-                    return;
+                    return this.validationLoginInfo.value;
                 }
 
                 UserDataService.isLoginUnique(this.currentUser.login, this.currentUser.id)
                     .then(response => {
-                        //console.log(response.data);
-
                         if (response.data > 0) {
                             this.validationLoginInfo.invalid = "Такой логин уже занят";
                             this.validationLoginInfo.value = false;
-                            return;
+                            return this.validationFullNameInfo.value;
                         }
 
-                        //this.validationLoginInfo.valid = "Корректный логин";
                         this.validationLoginInfo.value = true;
+                        return this.validationFullNameInfo.value;
                     })
                     .catch(error => {
                         console.log(error);
@@ -296,10 +270,11 @@
                         if (response.data > 0) {
                             this.validationEmailInfo.invalid = "Такой почтовый адрес уже занят";
                             this.validationEmailInfo.value = false;
-                            return;
+                            return this.validationFullNameInfo.value;
                         }
 
                         this.validationEmailInfo.value = true;
+                        return this.validationFullNameInfo.value;
                     })
                     .catch(error => {
                         console.log(error);
@@ -309,7 +284,7 @@
             validateRole() {
                 if (this.selectedRoleId == null) {
                     this.validationRoleInfo.value = false;
-                    return;
+                    return this.validationFullNameInfo.value;
                 }
 
                 let role = this.roles.find(x => x.value === this.selectedRoleId);
@@ -317,7 +292,7 @@
                 this.currentUser.role.status = role.text;
                 this.currentUser.role.name = role.name;
                 this.validationRoleInfo.value = true;
-                return;
+                return this.validationFullNameInfo.value;
             },
             validateAll() {
                 this.validateFullName();
@@ -325,13 +300,6 @@
                 this.validateEmail();
                 this.validateRole();
             }
-        }, async mounted() {
-            /*await this.getUserById(this.$route.params.id);
-            await this.getRoles();
-            this.validateLogin();
-            this.validateEmail();
-            this.validateRole();*/
-
         }, created: async function () {
             try {
                 await this.getUserById(this.$route.params.id);
@@ -341,28 +309,12 @@
                 console.log(e);
             }
         }
-
-        /*,
-        computed: {
-            validateLogin: async function() {
-                const promise = await new Promise((resolve, reject) => {
-                    setTimeout(() => {
-                        resolve(1);
-                    }, 300);
-                });
-
-                if (promise.data > 0)
-                    return false;
-                 else
-                    return true;
-            }
-        }*/
     }
 </script>
 
 <style scoped>
     .edit-form {
-        max-width: 300px;
+        max-width: 450px;
         margin: auto;
     }
 </style>

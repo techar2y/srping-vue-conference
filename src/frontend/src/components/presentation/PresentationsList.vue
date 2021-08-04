@@ -5,7 +5,7 @@
                 <b-form-input id="input-1" v-model="searchStr" placeholder="Поиск по логину">
                 </b-form-input>
                 <div class="input-group-append">
-                    <b-button variant="outline-info" @click="searchUser">Искать</b-button>
+                    <b-button variant="outline-info" @click="searchPresentation">Искать</b-button>
                 </div>
             </div>
         </div>
@@ -30,124 +30,120 @@
         </div>
 
         <div class="col-md-6">
-            <h4>Список пользователей</h4>
-            <ul class="list-group" v-if="Object.keys(users).length !== 0">
+            <h4>Список докладов</h4>
+            <ul class="list-group" v-if="Object.keys(presentations).length !== 0">
                 <li class="list-group-item"
                     :class="{ active: index == currentIndex }"
-                    v-for="(user, index) in users"
+                    v-for="(presentation, index) in presentations"
                     :key="index"
-                    @click="setActiveUser(user, index)"
+                    @click="setActivePresentation(presentation, index)"
                 >
-                    <div style="display:inline" v-if="Object.keys(user.fullName).length !== 0"> {{ user.fullName }}
+                    <div style="display:inline" v-if="Object.keys(presentation.title).length !== 0"> {{ presentation.title }}
                     </div>
-                    <div style="display:inline" v-else> Отсутствует полное имя</div>
+                    <div style="display:inline" v-else> Отсутствует заголовок</div>
                 </li>
             </ul>
-            <p v-else>Пользователи отсутствуют</p>
+            <p v-else>Доклады отсутствуют</p>
 
             <!--router-link to="/addUser"-->
-            <b-button to="/addUser" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
-                Добавить пользователя
+            <b-button to="/addPresentation" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
+                Добавить доклад
             </b-button>
             <!--/router-link-->
             <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 5px 0px"
-                    @click="deleteAllUsers"
-                    v-if="Object.keys(users).length !== 0">
+                    @click="deleteAllPresentations"
+                    v-if="Object.keys(presentations).length !== 0">
                 Очистить весь список
             </button>
         </div>
         <div class="col-md-6">
-            <div v-if="currentUser">
-                <h4>Пользователь</h4>
+            <div v-if="currentPresentation">
+                <h4>Доклад</h4>
                 <div>
-                    <label><strong>ID:</strong></label> {{ currentUser.id }}
+                    <label><strong>ID:</strong></label> {{ currentPresentation.id }}
                 </div>
                 <div>
-                    <label><strong>Полное имя:</strong></label> {{ currentUser.fullName }}
+                    <label><strong>Заголовок</strong></label> {{ currentPresentation.title }}
                 </div>
                 <div>
-                    <label><strong>Email:</strong></label> {{ currentUser.email }}
+                    <label><strong>Предмет:</strong></label> {{ currentPresentation.subject }}
                 </div>
                 <div>
-                    <label><strong>Логин:</strong></label> {{ currentUser.login }}
+                    <label><strong>Описание:</strong></label> {{ currentPresentation.description }}
                 </div>
                 <div>
-                    <label><strong>Статус:</strong></label> {{ currentUser.role.status }}
+                    <label><strong>Дата и время:</strong></label> {{ currentPresentation.date }}
+                </div>
+                <div>
+                    <label><strong>Аудитория:</strong></label> {{ currentPresentation.room.number }}
                 </div>
 
-                <!--router-link v-bind:to="`/users/` + currentUser.id"-->
-                <b-button v-bind:to="`/users/` + currentUser.id" class="btn btn-sm btn-warning"
+                <b-button v-bind:to="`/presentations/` + currentPresentation.id" class="btn btn-sm btn-warning"
                           style="margin: 10px 0px">
                     Редактировать
                 </b-button>
-                <!--/router-link-->
             </div>
             <div v-else>
                 <br/>
-                <p v-if="Object.keys(users).length !== 0">Пожалуйста выберите пользователя</p>
+                <p v-if="Object.keys(presentations).length !== 0">Пожалуйста выберите доклад</p>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-    import UserDataService from "../../services/UserDataService";
+    import PresentationDataService from "../../services/PresentationDataService";
 
     export default {
-        name: "users-list",
+        name: "presentations-list",
         data() {
             return {
-                users: [],
-                currentUser: null,
+                presentations: [],
+                currentPresentation: null,
                 currentIndex: -1,
                 searchStr: "",
 
                 page: 1,
                 pageCount: 0,
                 pageSize: 3,
-
                 pageSizes: [3, 6, 9]
             };
         },
         methods: {
-            getAllUsers() {
+            getAllPresentations() {
                 let params = this.getRequestParams(this.searchStr, this.page, this.pageSize);
-                UserDataService.getAllUsers(params)
+                PresentationDataService.getAllPresentations(params)
                     .then(result => {
-                        if(typeof result.data === 'undefined')
+                        if (typeof result.data === 'undefined')
                             return;
-                        this.users = typeof result.data.users !== 'undefined' ? result.data.users : {};
-                        this.pageCount = typeof result.data.totalItems !== 'undefined' ?
-                            result.data.totalItems : 0;
-
-                        console.log(this.users);
-                        console.log(this.pageCount);
+                        this.presentations = typeof result.data.presentations !== 'undefined' ? result.data.presentations : {};
+                        this.pageCount = typeof result.data.totalItems != 'undefined' ? result.data.totalItems : 0;
                     })
                     .catch(e => {
                         console.log(e);
-                    });
+                    })
             },
-            searchUser() {
-                UserDataService.findUserByLogin(this.searchStr)
+            searchPresentation() {
+                PresentationDataService.findByTitle(this.searchStr)
                     .then((response) => {
-                        this.users = [];
-                        if (typeof response.data.users !== "undefined")
-                            this.users = response.data.users;
+                        this.presentations = [];
+                        if (typeof response.data.presentations !== "undefined")
+                            this.presentations = response.data.presentations;
 
                     })
                     .catch(e => {
                         console.log(e);
                     });
             },
-            setActiveUser(user, index) {
-                this.currentUser = user;
-                this.currentIndex = user ? index : -1;
+            setActivePresentation(presentation, index) {
+                this.currentPresentation = presentation;
+                this.currentIndex = presentation ? index : -1;
             },
-            deleteAllUsers() {
-                UserDataService.deleteAllUsers()
+            deleteAllPresentations() {
+                PresentationDataService.deleteAllPresentations()
                     .then(() => {
-                        this.users = {};
-                        this.currentUser = null;
+                        this.presentations = {};
+                        this.currentPresentation = null;
                         this.currentIndex = -1;
                     })
                     .catch(error => {
@@ -173,17 +169,17 @@
             },
             handlePageChange(value) {
                 this.page = value;
-                this.getAllUsers();
+                this.getAllPresentations();
             },
 
             handlePageSizeChange(event) {
                 this.pageSize = event.target.value;
                 this.page = 1;
-                this.getAllUsers();
+                this.getAllPresentations();
             }
         },
         mounted() {
-            this.getAllUsers();
+            this.getAllPresentations();
         }
     }
 </script>
