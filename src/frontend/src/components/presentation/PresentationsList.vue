@@ -12,7 +12,7 @@
 
         <div class="col-md-12">
             <div class="mb-3">
-                Items per Page:
+                Докладов на странице
                 <select v-model="pageSize" @change="handlePageSizeChange($event)">
                     <option v-for="size in pageSizes" :key="size" :value="size">
                         {{ size }}
@@ -45,16 +45,15 @@
             </ul>
             <p v-else>Доклады отсутствуют</p>
 
-            <!--router-link to="/addUser"-->
-            <b-button to="/addPresentation" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
+            <b-button to="/addPresentation" variant="success" size="sm" style="margin: 10px 5px 0px">
                 Добавить доклад
             </b-button>
-            <!--/router-link-->
-            <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 5px 0px"
+
+            <b-button variant="danger" size="sm" style="margin: 10px 5px 0px"
                     @click="deleteAllPresentations"
                     v-if="Object.keys(presentations).length !== 0">
                 Очистить весь список
-            </button>
+            </b-button>
         </div>
         <div class="col-md-6">
             <div v-if="currentPresentation">
@@ -68,7 +67,7 @@
                 <div>
                     <label><strong>Предмет:</strong></label> {{ currentPresentation.subject }}
                 </div>
-                <div>
+                <div v-if="currentPresentation.description.length > 0">
                     <label><strong>Описание:</strong></label> {{ currentPresentation.description }}
                 </div>
                 <div>
@@ -78,7 +77,7 @@
                     <label><strong>Аудитория:</strong></label> {{ currentPresentation.room.number }}
                 </div>
 
-                <b-button v-bind:to="`/presentations/` + currentPresentation.id" class="btn btn-sm btn-warning"
+                <b-button v-bind:to="`/presentations/` + currentPresentation.id" variant="warning" size="sm"
                           style="margin: 10px 0px">
                     Редактировать
                 </b-button>

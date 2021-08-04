@@ -8,7 +8,7 @@ insert into roles (name, status) select 'Преподаватель', 'PRESENTER
 
 insert into users (email, full_name, login, role_id) select 'example@post.org',	'Peter Parker', 'spiderman', 3;
 
-insert into rooms (name, number) select 'Аудитория', 54;
+insert into rooms (number) select 54;
 
 insert into presentations (date, description, room_id, subject, title) select '05.06.2021', 'лекция', 1, 'math', 'заголовк';
 

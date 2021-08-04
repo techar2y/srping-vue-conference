@@ -1,25 +1,19 @@
 <template>
     <div id="app">
-        <nav class="navbar navbar-expand navbar-dark bg-dark">
-            <router-link to="/" class="navbar-brand">bezKoder</router-link>
-            <div class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <router-link to="/presentations" class="nav-link">Доклады</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link to="/users" class="nav-link">Пользователи</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link to="/tutorials" class="nav-link">Tutorials</router-link>
-                </li>
-                <li class="nav-item">
-                    <router-link to="/add" class="nav-link">Add</router-link>
-                </li>
-            </div>
-        </nav>
+        <div>
+            <b-navbar variant="dark" type="dark">
+                <b-navbar-nav>
+                    <b-navbar-brand to="/">
+                        <b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true">Home</b-icon>
+                    </b-navbar-brand>
+                    <b-nav-item to="/presentations">Доклады</b-nav-item>
+                    <b-nav-item to="/users">Пользователи</b-nav-item>
+                </b-navbar-nav>
+            </b-navbar>
+        </div>
 
         <div class="container mt-3">
-            <router-view />
+            <router-view/>
         </div>
     </div>
 </template>

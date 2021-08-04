@@ -30,6 +30,10 @@ class PresentationDataService {
     updatePresentation(id, schedule) {
         return http.put(this.defaultPath + `/presentations/${id}`, schedule);
     }
+
+    savePresentation(data) {
+        return http.post(this.defaultPath + "/presentations", data);
+    }
 }
 
 export default new PresentationDataService()

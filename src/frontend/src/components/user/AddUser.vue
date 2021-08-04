@@ -84,9 +84,9 @@
                 </b-form-valid-feedback>
             </div>
 
-            <button type="button" class="btn btn-success" style="margin: 10px 0px"
-                    @click="saveUser">Добавить
-            </button>
+            <b-button variant="success" style="margin: 10px 0px"
+                      @click="saveUser">Добавить
+            </b-button>
             <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
                 {{ validationForm.invalid }}
             </b-form-invalid-feedback>
@@ -94,13 +94,9 @@
 
         <div v-else>
             <h4>Пользователь успешно добавлен!</h4>
-            <button type="button" class="btn btn-success" @click="newUser">Добавить ещё</button>
+            <b-button variant="success" @click="newUser">Добавить ещё</b-button>
 
-            <div>
-                <router-link to="/users" class="nav-link">
-                    <button type="button" class="btn btn-link">Вернуться к списку пользователей</button>
-                </router-link>
-            </div>
+            <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
         </div>
     </div>
 
@@ -124,11 +120,11 @@
                 },
                 roles: [],
                 submitted: false,
-                validationFullNameInfo: { valid: "", invalid: "", value: null },
-                validationLoginInfo: { valid: "", invalid: "", value: null },
-                validationEmailInfo: { valid: "", invalid: "", value: null },
-                validationRoleInfo: { valid: "", invalid: "", value: null },
-                validationForm: { invalid: "", value: null }
+                validationFullNameInfo: {valid: "", invalid: "", value: null},
+                validationLoginInfo: {valid: "", invalid: "", value: null},
+                validationEmailInfo: {valid: "", invalid: "", value: null},
+                validationRoleInfo: {valid: "", invalid: "", value: null},
+                validationForm: {invalid: "", value: null}
             }
         },
         methods: {
@@ -154,12 +150,12 @@
                 this.selectedRoleId = null;
                 this.currentUser = {id: -1, fullName: "", login: "", email: "", role: {}};
                 this.roles = this.getRoles();
-                this.submitted =  false;
-                this.validationFullNameInfo = { valid: "", invalid: "", value: null };
-                this.validationLoginInfo = { valid: "", invalid: "", value: null };
-                this.validationEmailInfo = { valid: "", invalid: "", value: null };
-                this.validationRoleInfo = { valid: "", invalid: "", value: null };
-                this.validationForm = { invalid: "", value: null };
+                this.submitted = false;
+                this.validationFullNameInfo = {valid: "", invalid: "", value: null};
+                this.validationLoginInfo = {valid: "", invalid: "", value: null};
+                this.validationEmailInfo = {valid: "", invalid: "", value: null};
+                this.validationRoleInfo = {valid: "", invalid: "", value: null};
+                this.validationForm = {invalid: "", value: null};
             },
             getRoles() {
                 return new Promise((resolve, reject) => {
@@ -238,7 +234,7 @@
                 }
 
                 const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-                if(!re.test(String(this.currentUser.email).toLowerCase())) {
+                if (!re.test(String(this.currentUser.email).toLowerCase())) {
                     this.validationEmailInfo.invalid = "Такая почта не подойдет";
                     this.validationEmailInfo.value = false;
                     return this.validationEmailInfo.value;

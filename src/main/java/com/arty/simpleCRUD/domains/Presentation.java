@@ -28,8 +28,7 @@ public class Presentation
 
     }
 
-    public Presentation(Long id, String date, String subject, String description, String title, Room room) {
-        this.id = id;
+    public Presentation(String date, String subject, String description, String title, Room room) {
         this.date = date;
         this.subject = subject;
         this.description = description;

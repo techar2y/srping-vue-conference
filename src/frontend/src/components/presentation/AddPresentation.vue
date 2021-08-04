@@ -1,7 +1,7 @@
 <template>
     <div class="submit-form">
         <div v-if="!submitted">
-            <h4>Новый доклад</h4>
+            <h4 style="text-align: center">Новый доклад</h4>
 
             <div class="form-group">
                 <label>Заголовок доклада</label>
@@ -10,9 +10,9 @@
                         class="form-control"
                         id="title"
                         required
-                        v-model="presentation.title"
+                        v-model="currentPresentation.title"
                         name="title"
-                        placeholder="Чем интересней заголовк тем больше студентов придёт на доклад"
+                        placeholder="Чем интересней заголовок тем больше студентов придёт на доклад"
                         :state="validationTitleInfo.value" @input="validateTitle">
                 </b-form-input>
 
@@ -31,7 +31,7 @@
                         class="form-control"
                         id="title"
                         required
-                        v-model="presentation.subject"
+                        v-model="currentPresentation.subject"
                         name="title"
                         placeholder="Предмет доклада"
                         :state="validationSubjectInfo.value" @input="validateSubject">
@@ -46,10 +46,10 @@
             </div>
 
             <div class="form-group">
-                <label>Предмет</label>
+                <label>Описание</label>
                 <b-form-textarea
                         id="textarea"
-                        v-model="presentation.description"
+                        v-model="currentPresentation.description"
                         placeholder="Введите что нибудь..."
                         rows="3"
                         max-rows="6"
@@ -59,14 +59,14 @@
             <div class="form-group">
                 <label>Дата доклада</label>
                 <b-form-datepicker
-                        id="date" v-model="presentation.date" class="mb-2"
+                        id="date" v-model="currentPresentation.date" class="mb-2"
                         :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="ru" placeholder="Выберете дату доклада">
+                        locale="ru" placeholder="Выберете дату доклада" @input="validateDate">
                 </b-form-datepicker>
                 <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
                     {{ validationDateInfo.invalid }}
                 </b-form-invalid-feedback>
-                <p>{{ presentation.date }}</p>
+                <p>{{ currentPresentation.date }}</p>
             </div>
 
             <div class="form-group">
@@ -93,7 +93,7 @@
             </div>
 
 
-            <b-button type="button" class="btn btn-success" style="margin: 10px 0px"
+            <b-button variant="success" style="margin: 10px 0px"
                       @click="savePresentation">Добавить
             </b-button>
             <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
@@ -103,15 +103,11 @@
 
         <div v-else>
             <h4>Доклад успешно добавлен!</h4>
-            <b-button type="button" class="btn btn-success" @click="newPresentation">Добавить ещё</b-button>
+            <b-button variant="success" size="sm" @click="newPresentation">Добавить ещё</b-button>
 
-            <div>
-                <b-button to="/presentations" type="button" class="btn btn-link">Вернуться к списку докладов</b-button>
-            </div>
+            <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
         </div>
     </div>
-
-
 </template>
 
 <script>
@@ -123,7 +119,7 @@
         data() {
             return {
                 currentPresentation: {
-                    id: null,
+                    id: -1,
                     date: "",
                     subject: "",
                     description: "",
@@ -133,12 +129,12 @@
                 selectedRoomId: null,
                 rooms: [],
                 submitted: false,
-                validationTitleInfo: { valid: "", invalid: "", value: null },
-                validationDescriptionInfo: { valid: "", invalid: "", value: null },
-                validationDateInfo: { valid: "", invalid: "", value: null },
-                validationSubjectInfo: { valid: "", invalid: "", value: null },
-                validationRoomInfo: { valid: "", invalid: "", value: null },
-                validationForm: { invalid: "", value: null }
+                validationTitleInfo: {valid: "", invalid: "", value: null},
+                validationDescriptionInfo: {valid: "", invalid: "", value: null},
+                validationDateInfo: {valid: "", invalid: "", value: null},
+                validationSubjectInfo: {valid: "", invalid: "", value: null},
+                validationRoomInfo: {valid: "", invalid: "", value: null},
+                validationForm: {invalid: "", value: null}
             }
         }, methods: {
             async savePresentation() {
@@ -160,15 +156,23 @@
             }, newPresentation() {
                 this.submitted = false;
                 this.selectedRoomId = null;
-                this.currentPresentation = {id: -1, date: "", login: "", subject: "", description: "", title: "", room: {}};
+                this.currentPresentation = {
+                    id: -1,
+                    date: "",
+                    login: "",
+                    subject: "",
+                    description: "",
+                    title: "",
+                    room: {}
+                };
                 this.room = this.getRooms();
-                this.submitted =  false;
-                this.validationTitleInfo = { valid: "", invalid: "", value: null };
-                this.validationRoomInfo = { valid: "", invalid: "", value: null };
-                this.validationDescriptionInfo = { valid: "", invalid: "", value: null };
-                this.validationDateInfo = { valid: "", invalid: "", value: null };
-                this.validationSubjectInfo = { valid: "", invalid: "", value: null };
-                this.validationForm = { invalid: "", value: null };
+                this.submitted = false;
+                this.validationTitleInfo = {valid: "", invalid: "", value: null};
+                this.validationRoomInfo = {valid: "", invalid: "", value: null};
+                this.validationDescriptionInfo = {valid: "", invalid: "", value: null};
+                this.validationDateInfo = {valid: "", invalid: "", value: null};
+                this.validationSubjectInfo = {valid: "", invalid: "", value: null};
+                this.validationForm = {invalid: "", value: null};
             }, getRooms() {
                 return new Promise((resolve, reject) => {
                     RoomDataService.getAllRooms()
@@ -195,15 +199,54 @@
                         })
                 })
             }, validateTitle() {
-
+                if (this.currentPresentation.title.length < 1) {
+                    this.validationTitleInfo.invalid = "Поле обязательное к заполнению";
+                    this.validationTitleInfo.value = false;
+                    return this.validationTitleInfo.value;
+                } else if (this.currentPresentation.title.length > 31) {
+                    this.validationTitleInfo.invalid = "Заголовок не может быть больше 32 символов";
+                    this.validationTitleInfo.value = false;
+                    return this.validationTitleInfo.value;
+                } else {
+                    this.validationTitleInfo.value = true;
+                    return this.validationTitleInfo.value;
+                }
             }, validateRoom() {
+                if (this.selectedRoomId == null) {
+                    this.validationRoomInfo.value = false;
+                    return this.validationRoomInfo.value;
+                }
 
+                let room = this.rooms.find(x => x.value === this.selectedRoomId);
+                this.currentPresentation.room.id = room.value;
+                this.currentPresentation.room.number = room.text.substring(room.text.indexOf(" ") + 1);
+                this.validationRoomInfo.value = true;
+                return this.validationRoomInfo.value;
             }, validateDate() {
-
-            }, validateDescription() {
-
+                if (this.currentPresentation.date.length === 0) {
+                    this.validationDateInfo.invalid = "Нужно выбрать дату доклада";
+                    this.validationDateInfo.value = false;
+                    return this.validationDateInfo.value;
+                }
+                this.validationDateInfo.value = true;
+                return this.validationDateInfo.value;
             }, validateSubject() {
+                if (this.currentPresentation.subject.length < 1) {
+                    this.validationSubjectInfo.invalid = "Пожалуйста введите название предмета";
+                    this.validationSubjectInfo.value = false;
+                    return this.validationSubjectInfo.value;
+                }
 
+                this.validationSubjectInfo.value = true;
+                return this.validationSubjectInfo.value;
+            }, validateAll() {
+                return new Promise((resolve) => {
+                    let valid = this.validateTitle();
+                    valid = this.validateSubject() && valid;
+                    valid = this.validateDate() && valid;
+                    valid = this.validateRoom() && valid;
+                    resolve(valid);
+                })
             }
 
         }, created: async function () {

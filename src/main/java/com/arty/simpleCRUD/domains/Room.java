@@ -11,8 +11,6 @@ public class Room
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
-
     private Integer number;
 
     @OneToMany(mappedBy = "room")
@@ -23,11 +21,9 @@ public class Room
 
     }
 
-    public Room(Long id, String name, Integer number, List<Presentation> presentations) {
+    public Room(Long id, Integer number) {
         this.id = id;
-        this.name = name;
         this.number = number;
-        this.presentations = presentations;
     }
 
     public Long getId()
@@ -38,16 +34,6 @@ public class Room
     public void setId(Long id)
     {
         this.id = id;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-
-    public void setName(String name)
-    {
-        this.name = name;
     }
 
     public Integer getNumber()
