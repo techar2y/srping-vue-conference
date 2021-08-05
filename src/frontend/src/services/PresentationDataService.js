@@ -23,7 +23,7 @@ class PresentationDataService {
         return http.delete(this.defaultPath + "/presentations");
     }
 
-    deleteById(id) {
+    deletePresentationById(id) {
         return http.delete(this.defaultPath + `/presentations/${id}`);
     }
 

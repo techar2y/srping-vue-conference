@@ -1,7 +1,7 @@
 <template>
     <div v-if="!notFound">
         <div v-if="!deleted && !updated" class="edit-form">
-            <h4>Редактировать пользователя</h4>
+            <h4 style="text-align: center">Редактировать пользователя</h4>
             <form v-if="currentUser != null">
                 <div class="form-group">
                     <label>Полное имя</label>
@@ -87,24 +87,22 @@
 
             </form>
 
-            <button type="button" @click="updateUser(currentUser.id, currentUser)"
-                    class="btn btn-success btn-sm" style="margin: 5px 5px 5px 0px">
+            <b-button @click="updateUser(currentUser.id, currentUser)"
+                    variant="success" size="sm" style="margin: 5px 5px 5px 0px">
                 Обновить
-            </button>
+            </b-button>
 
-            <button type="button" @click="deleteUserById(currentUser.id)"
-                    class="btn btn-danger btn-sm" style="margin: 5px 5px 5px 0px">
+            <b-button @click="deleteUserById(currentUser.id)"
+                    variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
                 Удалить
-            </button>
+            </b-button>
 
         </div>
 
         <div v-else-if="deleted">
             <p>Пользователь успешно удалён</p>
             <div>
-                <router-link to="/users" class="nav-link">
-                    <button type="button" class="btn btn-link">Вернуться к списку пользователей</button>
-                </router-link>
+                <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
             </div>
         </div>
 
@@ -112,9 +110,7 @@
         <div v-else-if="updated">
             <div style="text-align: center">
                 <p>Пользователь успешно обновлён</p>
-                <router-link to="/users" class="nav-link">
-                    <button type="button" class="btn btn-link">Вернуться к списку пользователей</button>
-                </router-link>
+                <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
             </div>
         </div>
 
@@ -127,7 +123,6 @@
 <script>
     import UserDataService from "../../services/UserDataService";
     import RoleDataService from "../../services/RoleDataService";
-    //import ScheduleDataService from "../../services/ScheduleDataService";
 
     export default {
         name: "user-details",
@@ -189,7 +184,7 @@
                             });
                             this.roles.splice(0, 0, {
                                 value: null,
-                                text: "Выбирете статус пользователя",
+                                text: "Выберете статус пользователя",
                                 disabled: true
                             });
                             resolve(this.roles);

@@ -19,7 +19,7 @@ public class Presentation
 
     private String title;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
 

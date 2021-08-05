@@ -25,7 +25,7 @@
                     :total-rows="pageCount"
                     :per-page="pageSize"
                     pills
-                    @change="handlePageChange"
+                    @change="handlePageChange($event)"
             ></b-pagination>
         </div>
 

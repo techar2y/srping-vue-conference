@@ -83,7 +83,6 @@
                         @input="validateRoom"
                         aria-placeholder="Значение">
                 </b-form-select>
-                <p> {{ currentPresentation.role }}</p>
                 <b-form-invalid-feedback :state="validationRoomInfo.value" id="roomInvalidFeedback">
                     {{ validationRoomInfo.invalid }}
                 </b-form-invalid-feedback>
@@ -105,7 +104,9 @@
             <h4>Доклад успешно добавлен!</h4>
             <b-button variant="success" size="sm" @click="newPresentation">Добавить ещё</b-button>
 
-            <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
+            <div>
+                <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
+            </div>
         </div>
     </div>
 </template>
@@ -113,6 +114,7 @@
 <script>
     import PresentationDataService from "../../services/PresentationDataService";
     import RoomDataService from "../../services/RoomDataService";
+    import ValidatePresentationFormUtil from "../../utils/ValidatePresentationFormUtil";
 
     export default {
         name: "addPresentation",
@@ -198,47 +200,6 @@
                             reject(error);
                         })
                 })
-            }, validateTitle() {
-                if (this.currentPresentation.title.length < 1) {
-                    this.validationTitleInfo.invalid = "Поле обязательное к заполнению";
-                    this.validationTitleInfo.value = false;
-                    return this.validationTitleInfo.value;
-                } else if (this.currentPresentation.title.length > 31) {
-                    this.validationTitleInfo.invalid = "Заголовок не может быть больше 32 символов";
-                    this.validationTitleInfo.value = false;
-                    return this.validationTitleInfo.value;
-                } else {
-                    this.validationTitleInfo.value = true;
-                    return this.validationTitleInfo.value;
-                }
-            }, validateRoom() {
-                if (this.selectedRoomId == null) {
-                    this.validationRoomInfo.value = false;
-                    return this.validationRoomInfo.value;
-                }
-
-                let room = this.rooms.find(x => x.value === this.selectedRoomId);
-                this.currentPresentation.room.id = room.value;
-                this.currentPresentation.room.number = room.text.substring(room.text.indexOf(" ") + 1);
-                this.validationRoomInfo.value = true;
-                return this.validationRoomInfo.value;
-            }, validateDate() {
-                if (this.currentPresentation.date.length === 0) {
-                    this.validationDateInfo.invalid = "Нужно выбрать дату доклада";
-                    this.validationDateInfo.value = false;
-                    return this.validationDateInfo.value;
-                }
-                this.validationDateInfo.value = true;
-                return this.validationDateInfo.value;
-            }, validateSubject() {
-                if (this.currentPresentation.subject.length < 1) {
-                    this.validationSubjectInfo.invalid = "Пожалуйста введите название предмета";
-                    this.validationSubjectInfo.value = false;
-                    return this.validationSubjectInfo.value;
-                }
-
-                this.validationSubjectInfo.value = true;
-                return this.validationSubjectInfo.value;
             }, validateAll() {
                 return new Promise((resolve) => {
                     let valid = this.validateTitle();
@@ -247,6 +208,14 @@
                     valid = this.validateRoom() && valid;
                     resolve(valid);
                 })
+            }, validateTitle() {
+                return ValidatePresentationFormUtil.validateTitle(this);
+            }, validateDate() {
+                return ValidatePresentationFormUtil.validateDate(this);
+            }, validateSubject() {
+                return ValidatePresentationFormUtil.validateSubject(this);
+            }, validateRoom() {
+                return ValidatePresentationFormUtil.validateRoom(this);
             }
 
         }, created: async function () {
