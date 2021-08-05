@@ -10,9 +10,6 @@ public class Presentation
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "date")
-    private String date;
-
     private String subject;
 
     private String description;
@@ -23,17 +20,19 @@ public class Presentation
     @JoinColumn(name = "room_id")
     private Room room;
 
+    private String lasts;
+
     public Presentation()
     {
 
     }
 
-    public Presentation(String date, String subject, String description, String title, Room room) {
-        this.date = date;
+    public Presentation(String subject, String description, String title, Room room, String lasts) {
         this.subject = subject;
         this.description = description;
         this.title = title;
         this.room = room;
+        this.lasts = lasts;
     }
 
     public Long getId()
@@ -44,16 +43,6 @@ public class Presentation
     public void setId(Long id)
     {
         this.id = id;
-    }
-
-    public String getDate()
-    {
-        return date;
-    }
-
-    public void setDate(String date)
-    {
-        this.date = date;
     }
 
     public String getSubject()
@@ -94,5 +83,15 @@ public class Presentation
     public void setTitle(String title)
     {
         this.title = title;
+    }
+
+    public String getLasts ()
+    {
+        return lasts;
+    }
+
+    public void setLasts (String lasts)
+    {
+        this.lasts = lasts;
     }
 }

@@ -106,11 +106,11 @@ public class PresentationController
 
 
             if (presentation != null) {
-                newPresentation.setDate(presentation.getDate());
                 newPresentation.setDescription(presentation.getDescription());
                 newPresentation.setRoom(presentation.getRoom());
                 newPresentation.setSubject(presentation.getSubject());
                 newPresentation.setTitle(presentation.getTitle());
+                newPresentation.setLasts(presentation.getLasts());
                 newPresentation = presentationRepository.save(newPresentation);
             }
 

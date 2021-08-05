@@ -31,32 +31,40 @@
 
         <div class="col-md-6">
             <h4>Список докладов</h4>
-            <ul class="list-group" v-if="Object.keys(presentations).length !== 0">
-                <li class="list-group-item"
-                    :class="{ active: index == currentIndex }"
-                    v-for="(presentation, index) in presentations"
-                    :key="index"
-                    @click="setActivePresentation(presentation, index)"
-                >
-                    <div style="display:inline" v-if="Object.keys(presentation.title).length !== 0"> {{ presentation.title }}
-                    </div>
-                    <div style="display:inline" v-else> Отсутствует заголовок</div>
-                </li>
-            </ul>
-            <p v-else>Доклады отсутствуют</p>
+            <div v-if="!pending">
+                <ul v-if="Object.keys(presentations).length !== 0" class="list-group">
+                    <li class="list-group-item"
+                        :class="{ active: index == currentIndex }"
+                        v-for="(presentation, index) in presentations"
+                        :key="index"
+                        @click="setActivePresentation(presentation, index)"
+                    >
+                        <div style="display:inline" v-if="Object.keys(presentation.title).length !== 0">
+                            {{ presentation.title }}
+                        </div>
+                        <div v-else style="display:inline"> Отсутствует заголовок</div>
+                    </li>
+                </ul>
+                <p v-else>Доклады отсутствуют</p>
+            </div>
+            <div v-else>
+                <div class="m-5" label="Busy">
+                    <b-spinner label="Loading..."></b-spinner>
+                </div>
+            </div>
 
             <b-button to="/addPresentation" variant="success" size="sm" style="margin: 10px 5px 0px">
                 Добавить доклад
             </b-button>
 
             <b-button variant="danger" size="sm" style="margin: 10px 5px 0px"
-                    @click="deleteAllPresentations"
-                    v-if="Object.keys(presentations).length !== 0">
+                      @click="deleteAllPresentations"
+                      v-if="Object.keys(presentations).length !== 0">
                 Очистить весь список
             </b-button>
         </div>
         <div class="col-md-6">
-            <div v-if="currentPresentation">
+            <div v-if="currentPresentation !== null">
                 <h4>Доклад</h4>
                 <div>
                     <label><strong>ID:</strong></label> {{ currentPresentation.id }}
@@ -71,7 +79,7 @@
                     <label><strong>Описание:</strong></label> {{ currentPresentation.description }}
                 </div>
                 <div>
-                    <label><strong>Дата и время:</strong></label> {{ currentPresentation.date }}
+                    <label><strong>Длительность:</strong></label> {{ currentPresentation.lasts }}
                 </div>
                 <div>
                     <label><strong>Аудитория:</strong></label> {{ currentPresentation.room.number }}
@@ -101,6 +109,7 @@
                 currentPresentation: null,
                 currentIndex: -1,
                 searchStr: "",
+                pending: false,
 
                 page: 1,
                 pageCount: 0,
@@ -111,14 +120,17 @@
         methods: {
             getAllPresentations() {
                 let params = this.getRequestParams(this.searchStr, this.page, this.pageSize);
+                this.pending = true;
                 PresentationDataService.getAllPresentations(params)
                     .then(result => {
                         if (typeof result.data === 'undefined')
                             return;
                         this.presentations = typeof result.data.presentations !== 'undefined' ? result.data.presentations : {};
                         this.pageCount = typeof result.data.totalItems != 'undefined' ? result.data.totalItems : 0;
+                        this.pending = false;
                     })
                     .catch(e => {
+                        this.pending = false;
                         console.log(e);
                     })
             },
@@ -141,7 +153,7 @@
             deleteAllPresentations() {
                 PresentationDataService.deleteAllPresentations()
                     .then(() => {
-                        this.presentations = {};
+                        this.presentations = [];
                         this.currentPresentation = null;
                         this.currentIndex = -1;
                     })

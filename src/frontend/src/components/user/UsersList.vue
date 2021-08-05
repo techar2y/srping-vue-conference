@@ -31,30 +31,37 @@
 
         <div class="col-md-6">
             <h4>Список пользователей</h4>
-            <ul class="list-group" v-if="Object.keys(users).length !== 0">
-                <li class="list-group-item"
-                    :class="{ active: index == currentIndex }"
-                    v-for="(user, index) in users"
-                    :key="index"
-                    @click="setActiveUser(user, index)"
-                >
-                    <div style="display:inline" v-if="Object.keys(user.fullName).length !== 0"> {{ user.fullName }}
-                    </div>
-                    <div style="display:inline" v-else> Отсутствует полное имя</div>
-                </li>
-            </ul>
-            <p v-else>Пользователи отсутствуют</p>
+            <div v-if="!pending">
+                <ul class="list-group" v-if="Object.keys(users).length !== 0">
+                    <li class="list-group-item"
+                        :class="{ active: index == currentIndex }"
+                        v-for="(user, index) in users"
+                        :key="index"
+                        @click="setActiveUser(user, index)"
+                    >
+                        <div style="display:inline" v-if="Object.keys(user.fullName).length !== 0"> {{ user.fullName }}
+                        </div>
+                        <div style="display:inline" v-else> Отсутствует полное имя</div>
+                    </li>
+                </ul>
+                <p v-else>Пользователи отсутствуют</p>
+            </div>
+            <div v-else>
+                <div class="m-5" label="Busy">
+                    <b-spinner label="Loading..."></b-spinner>
+                </div>
+            </div>
 
-            <!--router-link to="/addUser"-->
-            <b-button to="/addUser" type="button" class="btn btn-sm btn-success" style="margin: 10px 5px 0px">
+
+            <b-button to="/addUser" variant="success" size="sm" style="margin: 10px 5px 0px">
                 Добавить пользователя
             </b-button>
-            <!--/router-link-->
-            <button type="button" class="btn btn-sm btn-danger" style="margin: 10px 5px 0px"
+
+            <b-button variant="danger" size="sm" style="margin: 10px 5px 0px"
                     @click="deleteAllUsers"
                     v-if="Object.keys(users).length !== 0">
                 Очистить весь список
-            </button>
+            </b-button>
         </div>
         <div class="col-md-6">
             <div v-if="currentUser">
@@ -75,12 +82,10 @@
                     <label><strong>Статус:</strong></label> {{ currentUser.role.status }}
                 </div>
 
-                <!--router-link v-bind:to="`/users/` + currentUser.id"-->
                 <b-button v-bind:to="`/users/` + currentUser.id" class="btn btn-sm btn-warning"
                           style="margin: 10px 0px">
                     Редактировать
                 </b-button>
-                <!--/router-link-->
             </div>
             <div v-else>
                 <br/>
@@ -101,6 +106,7 @@
                 currentUser: null,
                 currentIndex: -1,
                 searchStr: "",
+                pending: false,
 
                 page: 1,
                 pageCount: 0,
@@ -112,18 +118,19 @@
         methods: {
             getAllUsers() {
                 let params = this.getRequestParams(this.searchStr, this.page, this.pageSize);
+                this.pending = true;
                 UserDataService.getAllUsers(params)
                     .then(result => {
-                        if(typeof result.data === 'undefined')
+                        if (typeof result.data === 'undefined')
                             return;
                         this.users = typeof result.data.users !== 'undefined' ? result.data.users : {};
                         this.pageCount = typeof result.data.totalItems !== 'undefined' ?
                             result.data.totalItems : 0;
 
-                        console.log(this.users);
-                        console.log(this.pageCount);
+                        this.pending = false;
                     })
                     .catch(e => {
+                        this.pending = false;
                         console.log(e);
                     });
             },

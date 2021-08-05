@@ -10,6 +10,6 @@ insert into users (email, full_name, login, role_id) select 'example@post.org',	
 
 insert into rooms (number) select 54;
 
-insert into presentations (date, description, room_id, subject, title) select '05.06.2021', 'лекция', 1, 'math', 'заголовк';
+insert into presentations (description, room_id, subject, title, lasts) select 'лекция', 1, 'math', 'заголовк', 1;
 
 

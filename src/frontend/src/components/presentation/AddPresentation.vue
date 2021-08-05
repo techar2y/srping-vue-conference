@@ -57,16 +57,12 @@
             </div>
 
             <div class="form-group">
-                <label>Дата доклада</label>
-                <b-form-datepicker
-                        id="date" v-model="currentPresentation.date" class="mb-2"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="ru" placeholder="Выберете дату доклада" @input="validateDate">
-                </b-form-datepicker>
-                <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
-                    {{ validationDateInfo.invalid }}
+                <label>Продолжительность доклада:&nbsp;</label>
+                <b-time v-model="currentPresentation.lasts" locale="ru"></b-time>
+                <b-form-invalid-feedback :state="validationLastsInfo.value" id="lastsInvalidFeedback">
+                    {{ validationLastsInfo.invalid }}
                 </b-form-invalid-feedback>
-                <p>{{ currentPresentation.date }}</p>
+                <p>{{ currentPresentation.lasts }}</p>
             </div>
 
             <div class="form-group">
@@ -92,8 +88,10 @@
             </div>
 
 
-            <b-button variant="success" style="margin: 10px 0px"
+            <b-button variant="success" style="margin: 10px 5px 0px"
                       @click="savePresentation">Добавить
+            </b-button>
+            <b-button to="/presentations" variant="danger" style="margin: 10px 5px 0px">Отмена
             </b-button>
             <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
                 {{ validationForm.invalid }}
@@ -122,7 +120,7 @@
             return {
                 currentPresentation: {
                     id: -1,
-                    date: "",
+                    lasts: "",
                     subject: "",
                     description: "",
                     room: {},
@@ -133,7 +131,7 @@
                 submitted: false,
                 validationTitleInfo: {valid: "", invalid: "", value: null},
                 validationDescriptionInfo: {valid: "", invalid: "", value: null},
-                validationDateInfo: {valid: "", invalid: "", value: null},
+                validationLastsInfo: {valid: "", invalid: "", value: null},
                 validationSubjectInfo: {valid: "", invalid: "", value: null},
                 validationRoomInfo: {valid: "", invalid: "", value: null},
                 validationForm: {invalid: "", value: null}
@@ -147,6 +145,7 @@
                     return;
                 }
 
+                console.log(this.currentPresentation);
                 PresentationDataService.savePresentation(this.currentPresentation)
                     .then(result => {
                         this.currentPresentation.id = result.data;
@@ -204,14 +203,14 @@
                 return new Promise((resolve) => {
                     let valid = this.validateTitle();
                     valid = this.validateSubject() && valid;
-                    valid = this.validateDate() && valid;
+                    valid = this.validateLasts() && valid;
                     valid = this.validateRoom() && valid;
                     resolve(valid);
                 })
             }, validateTitle() {
                 return ValidatePresentationFormUtil.validateTitle(this);
-            }, validateDate() {
-                return ValidatePresentationFormUtil.validateDate(this);
+            }, validateLasts() {
+                return ValidatePresentationFormUtil.validateLasts(this);
             }, validateSubject() {
                 return ValidatePresentationFormUtil.validateSubject(this);
             }, validateRoom() {

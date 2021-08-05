@@ -75,7 +75,6 @@
                         @input="validateRole"
                         aria-placeholder="Значение">
                 </b-form-select>
-                <p> {{ currentUser.role }}</p>
                 <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
                     {{ validationRoleInfo.invalid }}
                 </b-form-invalid-feedback>
@@ -84,8 +83,10 @@
                 </b-form-valid-feedback>
             </div>
 
-            <b-button variant="success" style="margin: 10px 0px"
+            <b-button variant="success" style="margin: 10px 5px 0px"
                       @click="saveUser">Добавить
+            </b-button>
+            <b-button to="/users" variant="danger" style="margin: 10px 5px 0px">Отмена
             </b-button>
             <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
                 {{ validationForm.invalid }}

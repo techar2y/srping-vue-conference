@@ -1,122 +1,135 @@
 <template>
-    <div v-if="!notFound">
-        <div v-if="!deleted && !updated" class="edit-form">
-            <h4 style="text-align: center">Редактировать пользователя</h4>
-            <form v-if="currentUser != null">
-                <div class="form-group">
-                    <label>Полное имя</label>
-                    <b-form-input
-                            type="text"
-                            class="form-control"
-                            required
-                            v-model="currentUser.fullName"
-                            placeholder="Peter Parker"
-                            name="fullName"
-                            id="fullName"
-                            :state="validationFullNameInfo.value" @input="validateFullName">
-                    </b-form-input>
-                    <b-form-invalid-feedback :state="validationFullNameInfo.value" id="fullNameInvalidFeedback">
-                        {{ validationFullNameInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationFullNameInfo.value" id="fullNameValidFeedback">
-                    </b-form-valid-feedback>
+    <div>
+        <div v-if="currentUser != null">
+            <div v-if="!notFound">
+                <div v-if="!deleted && !updated" class="edit-form">
+                    <h4 style="text-align: center">Редактировать пользователя</h4>
+                    <form v-if="currentUser != null">
+                        <div class="form-group">
+                            <label>Полное имя</label>
+                            <b-form-input
+                                    type="text"
+                                    class="form-control"
+                                    required
+                                    v-model="currentUser.fullName"
+                                    placeholder="Peter Parker"
+                                    name="fullName"
+                                    id="fullName"
+                                    :state="validationFullNameInfo.value" @input="validateFullName">
+                            </b-form-input>
+                            <b-form-invalid-feedback :state="validationFullNameInfo.value" id="fullNameInvalidFeedback">
+                                {{ validationFullNameInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationFullNameInfo.value" id="fullNameValidFeedback">
+                            </b-form-valid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Логин</label>
+                            <b-form-input
+                                    type="text"
+                                    class="form-control"
+                                    id="login"
+                                    required
+                                    v-model="currentUser.login"
+                                    name="login"
+                                    placeholder="user's login"
+                                    :state="validationLoginInfo.value" @input="validateLogin">
+                            </b-form-input>
+
+                            <b-form-invalid-feedback :state="validationLoginInfo.value" id="loginInvalidFeedback">
+                                {{ validationLoginInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationLoginInfo.value" id="loginValidFeedback">
+                                {{ validationLoginInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Email</label>
+                            <b-form-input
+                                    class="form-control"
+                                    id="email"
+                                    required
+                                    v-model="currentUser.email"
+                                    name="email"
+                                    placeholder="example@post.com"
+                                    :state="validationEmailInfo.value" @input="validateEmail">
+                            </b-form-input>
+                            <b-form-invalid-feedback :state="validationEmailInfo.value" id="emailInvalidFeedback">
+                                {{ validationEmailInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationEmailInfo.value" id="emailValidFeedback">
+                                {{ validationEmailInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Статус</label>
+                            <b-form-select
+                                    class="form-control"
+                                    id="role"
+                                    required
+                                    v-model="selectedRoleId"
+                                    :options="roles"
+                                    :state="validationRoleInfo.value"
+                                    name="role"
+                                    placeholder="user's role"
+                                    @input="validateRole"
+                                    aria-placeholder="Значение">
+                            </b-form-select>
+                            <p> {{ currentUser.role }}</p>
+                            <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
+                                {{ validationRoleInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationRoleInfo.value" id="roleValidFeedback">
+                                {{ validationRoleInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+
+                    </form>
+
+                    <b-button @click="updateUser(currentUser.id, currentUser)"
+                              variant="success" size="sm" style="margin: 5px 5px 5px 0px">
+                        Обновить
+                    </b-button>
+
+                    <b-button @click="deleteUserById(currentUser.id)"
+                              variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
+                        Удалить
+                    </b-button>
+
                 </div>
 
-                <div class="form-group">
-                    <label>Логин</label>
-                    <b-form-input
-                            type="text"
-                            class="form-control"
-                            id="login"
-                            required
-                            v-model="currentUser.login"
-                            name="login"
-                            placeholder="user's login"
-                            :state="validationLoginInfo.value" @input="validateLogin">
-                    </b-form-input>
-
-                    <b-form-invalid-feedback :state="validationLoginInfo.value" id="loginInvalidFeedback">
-                        {{ validationLoginInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationLoginInfo.value" id="loginValidFeedback">
-                        {{ validationLoginInfo.valid }}
-                    </b-form-valid-feedback>
+                <div v-else-if="deleted">
+                    <p>Пользователь успешно удалён</p>
+                    <div>
+                        <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Email</label>
-                    <b-form-input
-                            class="form-control"
-                            id="email"
-                            required
-                            v-model="currentUser.email"
-                            name="email"
-                            placeholder="example@post.com"
-                            :state="validationEmailInfo.value" @input="validateEmail">
-                    </b-form-input>
-                    <b-form-invalid-feedback :state="validationEmailInfo.value" id="emailInvalidFeedback">
-                        {{ validationEmailInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationEmailInfo.value" id="emailValidFeedback">
-                        {{ validationEmailInfo.valid }}
-                    </b-form-valid-feedback>
+
+                <div v-else-if="updated">
+                    <div style="text-align: center">
+                        <p>Пользователь успешно обновлён</p>
+                        <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Статус</label>
-                    <b-form-select
-                            class="form-control"
-                            id="role"
-                            required
-                            v-model="selectedRoleId"
-                            :options="roles"
-                            :state="validationRoleInfo.value"
-                            name="role"
-                            placeholder="user's role"
-                            @input="validateRole"
-                            aria-placeholder="Значение">
-                    </b-form-select>
-                    <p> {{ currentUser.role }}</p>
-                    <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
-                        {{ validationRoleInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationRoleInfo.value" id="roleValidFeedback">
-                        {{ validationRoleInfo.valid }}
-                    </b-form-valid-feedback>
-                </div>
-
-            </form>
-
-            <b-button @click="updateUser(currentUser.id, currentUser)"
-                    variant="success" size="sm" style="margin: 5px 5px 5px 0px">
-                Обновить
-            </b-button>
-
-            <b-button @click="deleteUserById(currentUser.id)"
-                    variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
-                Удалить
-            </b-button>
-
+            </div>
+            <div v-else>
+                <h4>Пользователь не найден</h4>
+            </div>
         </div>
-
-        <div v-else-if="deleted">
-            <p>Пользователь успешно удалён</p>
-            <div>
-                <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
+        <div v-else>
+            <div class="d-flex justify-content-center mb-3">
+                <b-spinner label="Loading..."></b-spinner>
             </div>
         </div>
 
-
-        <div v-else-if="updated">
-            <div style="text-align: center">
-                <p>Пользователь успешно обновлён</p>
-                <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
-            </div>
+        <div>
+            <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
         </div>
-
-    </div>
-    <div v-else>
-        <h4>Пользователь не найден</h4>
     </div>
 </template>
 

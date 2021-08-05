@@ -27,14 +27,14 @@ class ValidatePresentationFormUtil {
         return context.validationRoomInfo.value;
     }
     
-    validateDate(context) {
-        if (context.currentPresentation.date.length === 0) {
-            context.validationDateInfo.invalid = "Нужно выбрать дату доклада";
-            context.validationDateInfo.value = false;
-            return context.validationDateInfo.value;
+    validateLasts(context) {
+        if (context.currentPresentation.lasts.length === 0) {
+            context.validationLastsInfo.invalid = "Введите продолжительность доклада";
+            context.validationLastsInfo.value = false;
+            return context.validationLastsInfo.value;
         }
-        context.validationDateInfo.value = true;
-        return context.validationDateInfo.value;
+        context.validationLastsInfo.value = true;
+        return context.validationLastsInfo.value;
     }
     
     validateSubject(context) {

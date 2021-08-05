@@ -1,126 +1,135 @@
 <template>
-    <div v-if="!notFound">
-        <div v-if="!deleted && !updated" class="edit-form">
-            <h4 style="text-align: center">Редактировать доклад</h4>
-            <form v-if="currentPresentation != null">
-                <div class="form-group">
-                    <label>Заголовок доклада</label>
-                    <b-form-input
-                            type="text"
-                            class="form-control"
-                            id="title"
-                            required
-                            v-model="currentPresentation.title"
-                            name="title"
-                            placeholder="Чем интересней заголовок тем больше студентов придёт на доклад"
-                            :state="validationTitleInfo.value" @input="validateTitle">
-                    </b-form-input>
+    <div>
+        <div v-if="currentPresentation != null">
+            <div v-if="!notFound">
+                <div v-if="!deleted && !updated" class="edit-form">
+                    <h4 style="text-align: center">Редактировать доклад</h4>
+                    <form v-if="currentPresentation != null">
+                        <div class="form-group">
+                            <label>Заголовок доклада</label>
+                            <b-form-input
+                                    type="text"
+                                    class="form-control"
+                                    id="title"
+                                    required
+                                    v-model="currentPresentation.title"
+                                    name="title"
+                                    placeholder="Чем интересней заголовок тем больше студентов придёт на доклад"
+                                    :state="validationTitleInfo.value" @input="validateTitle">
+                            </b-form-input>
 
-                    <b-form-invalid-feedback :state="validationTitleInfo.value" id="titleInvalidFeedback">
-                        {{ validationTitleInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationTitleInfo.value" id="titleValidFeedback">
-                        {{ validationTitleInfo.valid }}
-                    </b-form-valid-feedback>
+                            <b-form-invalid-feedback :state="validationTitleInfo.value" id="titleInvalidFeedback">
+                                {{ validationTitleInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationTitleInfo.value" id="titleValidFeedback">
+                                {{ validationTitleInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Предмет</label>
+                            <b-form-input
+                                    type="text"
+                                    class="form-control"
+                                    id="title"
+                                    required
+                                    v-model="currentPresentation.subject"
+                                    name="title"
+                                    placeholder="Предмет доклада"
+                                    :state="validationSubjectInfo.value" @input="validateSubject">
+                            </b-form-input>
+
+                            <b-form-invalid-feedback :state="validationSubjectInfo.value" id="subjectInvalidFeedback">
+                                {{ validationSubjectInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationSubjectInfo.value" id="subjectValidFeedback">
+                                {{ validationSubjectInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Описание</label>
+                            <b-form-textarea
+                                    id="textarea"
+                                    v-model="currentPresentation.description"
+                                    placeholder="Введите что нибудь..."
+                                    rows="3"
+                                    max-rows="6"
+                            ></b-form-textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Продолжительность доклада:&nbsp;</label>
+                            <b-time v-model="currentPresentation.lasts" locale="ru"></b-time>
+                            <b-form-invalid-feedback :state="validationLastsInfo.value" id="lastsInvalidFeedback">
+                                {{ validationLastsInfo.invalid }}
+                            </b-form-invalid-feedback>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Аудитория</label>
+                            <b-form-select
+                                    class="form-control"
+                                    id="room"
+                                    required
+                                    v-model="selectedRoomId"
+                                    :options="rooms"
+                                    :state="validationRoomInfo.value"
+                                    name="room"
+                                    placeholder="Номер аудитории"
+                                    @input="validateRoom"
+                                    aria-placeholder="Значение">
+                            </b-form-select>
+                            <p> {{ currentPresentation.role }}</p>
+                            <b-form-invalid-feedback :state="validationRoomInfo.value" id="roomInvalidFeedback">
+                                {{ validationRoomInfo.invalid }}
+                            </b-form-invalid-feedback>
+                            <b-form-valid-feedback :state="validationRoomInfo.value" id="roomValidFeedback">
+                                {{ validationRoomInfo.valid }}
+                            </b-form-valid-feedback>
+                        </div>
+                    </form>
+
+                    <b-button @click="updatePresentation(currentPresentation.id, currentPresentation)"
+                              variant="success" size="sm" style="margin: 5px 5px 5px 0px">
+                        Обновить
+                    </b-button>
+
+                    <b-button @click="deletePresentationById(currentPresentation.id)"
+                              variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
+                        Удалить
+                    </b-button>
                 </div>
 
-                <div class="form-group">
-                    <label>Предмет</label>
-                    <b-form-input
-                            type="text"
-                            class="form-control"
-                            id="title"
-                            required
-                            v-model="currentPresentation.subject"
-                            name="title"
-                            placeholder="Предмет доклада"
-                            :state="validationSubjectInfo.value" @input="validateSubject">
-                    </b-form-input>
-
-                    <b-form-invalid-feedback :state="validationSubjectInfo.value" id="subjectInvalidFeedback">
-                        {{ validationSubjectInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationSubjectInfo.value" id="subjectValidFeedback">
-                        {{ validationSubjectInfo.valid }}
-                    </b-form-valid-feedback>
+                <div v-else-if="deleted">
+                    <p>Пользователь успешно удалён</p>
+                    <div>
+                        <b-button to="/presentations" variant="link">Вернуться к списку пользователей</b-button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Описание</label>
-                    <b-form-textarea
-                            id="textarea"
-                            v-model="currentPresentation.description"
-                            placeholder="Введите что нибудь..."
-                            rows="3"
-                            max-rows="6"
-                    ></b-form-textarea>
+
+                <div v-else-if="updated">
+                    <div style="text-align: center">
+                        <p>Пользователь успешно обновлён</p>
+                        <b-button to="/presentations" variant="link">Вернуться к списку пользователей</b-button>
+                    </div>
                 </div>
 
-                <div class="form-group">
-                    <label>Дата доклада</label>
-                    <b-form-datepicker
-                            id="date" v-model="currentPresentation.date" class="mb-2"
-                            :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                            locale="ru" placeholder="Выберете дату доклада" @input="validateDate">
-                    </b-form-datepicker>
-                    <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
-                        {{ validationDateInfo.invalid }}
-                    </b-form-invalid-feedback>
-                </div>
-
-                <div class="form-group">
-                    <label>Аудитория</label>
-                    <b-form-select
-                            class="form-control"
-                            id="room"
-                            required
-                            v-model="selectedRoomId"
-                            :options="rooms"
-                            :state="validationRoomInfo.value"
-                            name="room"
-                            placeholder="Номер аудитории"
-                            @input="validateRoom"
-                            aria-placeholder="Значение">
-                    </b-form-select>
-                    <p> {{ currentPresentation.role }}</p>
-                    <b-form-invalid-feedback :state="validationRoomInfo.value" id="roomInvalidFeedback">
-                        {{ validationRoomInfo.invalid }}
-                    </b-form-invalid-feedback>
-                    <b-form-valid-feedback :state="validationRoomInfo.value" id="roomValidFeedback">
-                        {{ validationRoomInfo.valid }}
-                    </b-form-valid-feedback>
-                </div>
-            </form>
-
-            <b-button @click="updatePresentation(currentPresentation.id, currentPresentation)"
-                      variant="success" size="sm" style="margin: 5px 5px 5px 0px">
-                Обновить
-            </b-button>
-
-            <b-button @click="deletePresentationById(currentPresentation.id)"
-                      variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
-                Удалить
-            </b-button>
+            </div>
+            <div v-else>
+                <h4>Доклад не найден</h4>
+            </div>
         </div>
-
-        <div v-else-if="deleted">
-            <p>Пользователь успешно удалён</p>
-            <div>
-                <b-button to="/presentations" variant="link">Вернуться к списку пользователей</b-button>
+        <div v-else>
+            <div class="d-flex justify-content-center mb-3">
+                <b-spinner label="Loading..."></b-spinner>
             </div>
         </div>
 
-
-        <div v-else-if="updated">
-            <div style="text-align: center">
-                <p>Пользователь успешно обновлён</p>
-                <b-button to="/presentations" variant="link">Вернуться к списку пользователей</b-button>
-            </div>
+        <div>
+            <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
         </div>
-
-    </div>
-    <div v-else>
-        <h4>Доклад не найден</h4>
     </div>
 </template>
 
@@ -142,7 +151,7 @@
                 rooms: [],
                 validationTitleInfo: {valid: "", invalid: "", value: null},
                 validationDescriptionInfo: {valid: "", invalid: "", value: null},
-                validationDateInfo: {valid: "", invalid: "", value: null},
+                validationLastsInfo: {valid: "", invalid: "", value: null},
                 validationSubjectInfo: {valid: "", invalid: "", value: null},
                 validationRoomInfo: {valid: "", invalid: "", value: null},
                 validationForm: {invalid: "", value: null}
@@ -208,14 +217,14 @@
                 return new Promise((resolve) => {
                     let valid = this.validateTitle();
                     valid = this.validateSubject() && valid;
-                    valid = this.validateDate() && valid;
+                    valid = this.validateLasts() && valid;
                     valid = this.validateRoom() && valid;
                     resolve(valid);
                 })
             }, validateTitle() {
                 return ValidatePresentationFormUtil.validateTitle(this);
-            }, validateDate() {
-                return ValidatePresentationFormUtil.validateDate(this);
+            }, validateLasts() {
+                return ValidatePresentationFormUtil.validateLasts(this);
             }, validateSubject() {
                 return ValidatePresentationFormUtil.validateSubject(this);
             }, validateRoom() {
