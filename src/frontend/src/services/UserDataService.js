@@ -15,10 +15,6 @@ class UserDataService {
         return http.post(this.defaultPath + "/users", data);
     }
 
-    findUserByLogin(searchStr) {
-        return http.get(`${this.defaultPath}/users?searchStr=${searchStr}`);
-    }
-
     deleteAllUsers() {
         return http.delete(this.defaultPath + "/users");
     }
@@ -37,6 +33,10 @@ class UserDataService {
 
     isEmailUnique(email, id) {
         return http.get(`${this.defaultPath}/users/isEmailUnique?email=${email}&id=${id}`);
+    }
+
+    getUsersByStatus(status) {
+        return http.get(`${this.defaultPath}/users/getUsersByStatus?status=${status}`);
     }
 }
 

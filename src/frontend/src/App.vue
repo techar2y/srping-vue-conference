@@ -6,6 +6,7 @@
                     <b-navbar-brand to="/">
                         <b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true">Home</b-icon>
                     </b-navbar-brand>
+                    <b-nav-item to="/schedules">Расписание</b-nav-item>
                     <b-nav-item to="/presentations">Доклады</b-nav-item>
                     <b-nav-item to="/users">Пользователи</b-nav-item>
                 </b-navbar-nav>

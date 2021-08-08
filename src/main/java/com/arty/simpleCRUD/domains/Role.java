@@ -1,5 +1,7 @@
 package com.arty.simpleCRUD.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -61,5 +63,11 @@ public class Role
     public void setUsers (List<User> users)
     {
         this.users = users;
+    }
+
+    @JsonIgnore
+    public List<User> getUsers ()
+    {
+        return users;
     }
 }

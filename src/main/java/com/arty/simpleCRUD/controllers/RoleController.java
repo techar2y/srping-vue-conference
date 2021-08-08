@@ -1,7 +1,7 @@
 package com.arty.simpleCRUD.controllers;
 
 import com.arty.simpleCRUD.domains.Role;
-import com.arty.simpleCRUD.repos.RoleRepository;
+import com.arty.simpleCRUD.repos.IRoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +18,7 @@ import java.util.List;
 public class RoleController
 {
     @Autowired
-    public RoleRepository roleRepository;
+    public IRoleRepository roleRepository;
 
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getRoles() {

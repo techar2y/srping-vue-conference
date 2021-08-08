@@ -1,7 +1,12 @@
 package com.arty.simpleCRUD.controllers;
 
+import com.arty.simpleCRUD.domains.Role;
 import com.arty.simpleCRUD.domains.User;
-import com.arty.simpleCRUD.repos.UserRepository;
+import com.arty.simpleCRUD.repos.IUserRepository;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,7 +26,7 @@ import java.util.Map;
 public class UserController
 {
     @Autowired
-    private UserRepository userRepository;
+    private IUserRepository userRepository;
 
     @GetMapping("/users")
     public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam(required = false) String searchStr,
@@ -136,6 +141,18 @@ public class UserController
             List<User> users = userRepository.findUsersByEmailAndIdNot(email, id);
 
             return new ResponseEntity<>(users.size(), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/users/getUsersByStatus")
+    public ResponseEntity<List<User>> getUsersByStatus(@RequestParam String status) {
+        try {
+
+            List<User> users = userRepository.findUsersByStatusRoleNamedParamsNative(status);
+
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

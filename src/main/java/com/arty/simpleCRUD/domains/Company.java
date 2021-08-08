@@ -6,12 +6,13 @@ import javax.persistence.*;
 import java.util.Set;
 
 @Entity
+@Table(name = "companies")
 public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String companyName;
+    private String name;
 
     /*@OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "company_id")
@@ -31,14 +32,14 @@ public class Company {
         this.id = id;
     }
 
-    public String getCompanyName ()
+    public String getName ()
     {
-        return companyName;
+        return name;
     }
 
-    public void setCompanyName (String companyName)
+    public void setName (String name)
     {
-        this.companyName = companyName;
+        this.name = name;
     }
 
     public void setBranches (Set<Branch> branches)
@@ -46,4 +47,9 @@ public class Company {
         this.branches = branches;
     }
 
+    @JsonIgnore
+    public Set<Branch> getBranches ()
+    {
+        return branches;
+    }
 }

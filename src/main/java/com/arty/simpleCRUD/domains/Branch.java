@@ -1,8 +1,11 @@
 package com.arty.simpleCRUD.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
+@Table(name = "branches")
 public class Branch {
 
     @Id
@@ -35,6 +38,7 @@ public class Branch {
         this.branchName = branchName;
     }
 
+    @JsonIgnore
     public Company getCompany ()
     {
         return company;

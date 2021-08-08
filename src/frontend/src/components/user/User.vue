@@ -90,13 +90,17 @@
                     </form>
 
                     <b-button @click="updateUser(currentUser.id, currentUser)"
-                              variant="success" size="sm" style="margin: 5px 5px 5px 0px">
+                              variant="outline-success" style="margin: 5px 5px 5px 0px">
                         Обновить
                     </b-button>
 
                     <b-button @click="deleteUserById(currentUser.id)"
-                              variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
+                              variant="outline-danger" style="margin: 5px 5px 5px 0px">
                         Удалить
+                    </b-button>
+
+                    <b-button to="/users" variant="outline-secondary" style="margin: 5px 5px 5px 0px">
+                        Отмена
                     </b-button>
 
                 </div>
@@ -127,9 +131,9 @@
             </div>
         </div>
 
-        <div>
+        <!--div>
             <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
-        </div>
+        </div-->
     </div>
 </template>
 
@@ -147,26 +151,11 @@
                 updated: false,
                 selectedRoleId: null,
                 roles: [],
-                validationFullNameInfo: {
-                    valid: "",
-                    invalid: "",
-                    value: false
-                },
-                validationLoginInfo: {
-                    valid: "",
-                    invalid: "",
-                    value: false
-                },
-                validationEmailInfo: {
-                    valid: "",
-                    invalid: "",
-                    value: false
-                },
-                validationRoleInfo: {
-                    valid: "",
-                    invalid: "",
-                    value: null
-                }
+                validationFullNameInfo: {valid: "", invalid: "", value: null},
+                validationLoginInfo: {valid: "", invalid: "", value: null},
+                validationEmailInfo: {valid: "", invalid: "", value: null},
+                validationRoleInfo: {valid: "", invalid: "", value: null},
+                validationForm: {invalid: "", value: null}
             };
         },
         methods: {

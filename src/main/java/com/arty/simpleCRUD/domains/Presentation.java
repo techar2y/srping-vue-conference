@@ -1,6 +1,9 @@
 package com.arty.simpleCRUD.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.*;
 
 @Entity
 @Table(name = "presentations")
@@ -22,17 +25,28 @@ public class Presentation
 
     private String lasts;
 
+    private String date;
+
+    @ManyToMany
+    @JoinTable(name = "presentation_users",
+            joinColumns = @JoinColumn(name = "presentation_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<User> presenters;
+
     public Presentation()
     {
 
     }
 
-    public Presentation(String subject, String description, String title, Room room, String lasts) {
+    public Presentation(String subject, String description, String title,
+                        Room room, String lasts, String date, List<User> presenters) {
         this.subject = subject;
         this.description = description;
         this.title = title;
         this.room = room;
         this.lasts = lasts;
+        this.date = date;
+        this.presenters = presenters;
     }
 
     public Long getId()
@@ -93,5 +107,25 @@ public class Presentation
     public void setLasts (String lasts)
     {
         this.lasts = lasts;
+    }
+
+    public String getDate ()
+    {
+        return date;
+    }
+
+    public void setDate (String date)
+    {
+        this.date = date;
+    }
+
+    public List<User> getPresenters ()
+    {
+        return presenters;
+    }
+
+    public void setPresenters (List<User> presenters)
+    {
+        this.presenters = presenters;
     }
 }

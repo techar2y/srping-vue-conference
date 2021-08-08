@@ -99,6 +99,11 @@ export default new Router({
             path: "/add",
             name: "add",
             component: () => import("./components/tutorials/AddTutorial")
+        },
+        {
+            path: "/schedules",
+            name: "SchedulesList",
+            component: () => import("./components/schedule/SchedulesList")
         }
     ]
 });

@@ -59,6 +59,19 @@
                         </div>
 
                         <div class="form-group">
+                            <label>Дата доклада</label>
+                            <b-form-datepicker
+                                    id="date" v-model="currentPresentation.date" class="mb-2"
+                                    :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
+                                    locale="ru" placeholder="Выберете дату доклада" @input="validateDate">
+                            </b-form-datepicker>
+                            <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
+                                {{ validationDateInfo.invalid }}
+                            </b-form-invalid-feedback>
+                        </div>
+
+
+                        <div class="form-group">
                             <label>Продолжительность доклада:&nbsp;</label>
                             <b-time v-model="currentPresentation.lasts" locale="ru"></b-time>
                             <b-form-invalid-feedback :state="validationLastsInfo.value" id="lastsInvalidFeedback">
@@ -90,14 +103,39 @@
                         </div>
                     </form>
 
-                    <b-button @click="updatePresentation(currentPresentation.id, currentPresentation)"
-                              variant="success" size="sm" style="margin: 5px 5px 5px 0px">
+                    <div class="form-group">
+                        <label>Ведущий</label>
+                        <b-form-select
+                                class="form-control"
+                                id="presenter"
+                                required
+                                v-model="selectedPresenterId"
+                                :options="cmbFormPresenters"
+                                name="presenter"
+                                placeholder="Ведущий"
+                                aria-placeholder="Значение">
+                        </b-form-select>
+
+                        <b-form-invalid-feedback :state="validationPresenterInfo.value" id="presenterInvalidFeedback">
+                            {{ validationPresenterInfo.invalid }}
+                        </b-form-invalid-feedback>
+                        <b-form-valid-feedback :state="validationPresenterInfo.value" id="presenterValidFeedback">
+                            {{ validationPresenterInfo.valid }}
+                        </b-form-valid-feedback>
+                    </div>
+
+                    <b-button @click="updatePresentation(currentPresentation.id)"
+                              variant="outline-success" style="margin: 5px 5px 5px 0px">
                         Обновить
                     </b-button>
 
                     <b-button @click="deletePresentationById(currentPresentation.id)"
-                              variant="danger" size="sm" style="margin: 5px 5px 5px 0px">
+                              variant="outline-danger" style="margin: 5px 5px 5px 0px">
                         Удалить
+                    </b-button>
+
+                    <b-button to="/presentations" variant="outline-secondary" style="margin: 5px 5px 5px 0px">
+                        Отмена
                     </b-button>
                 </div>
 
@@ -127,9 +165,9 @@
             </div>
         </div>
 
-        <div>
+        <!--div>
             <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
-        </div>
+        </div-->
     </div>
 </template>
 
@@ -137,6 +175,7 @@
     import PresentationDataService from "../../services/PresentationDataService";
     import RoomDataService from "../../services/RoomDataService";
     import ValidatePresentationFormUtil from "../../utils/ValidatePresentationFormUtil";
+    import UserDataService from "../../services/UserDataService";
 
 
     export default {
@@ -149,11 +188,16 @@
                 updated: false,
                 selectedRoomId: null,
                 rooms: [],
+                presenters: [],
+                cmbFormPresenters: [],
+                selectedPresenterId: null,
                 validationTitleInfo: {valid: "", invalid: "", value: null},
                 validationDescriptionInfo: {valid: "", invalid: "", value: null},
                 validationLastsInfo: {valid: "", invalid: "", value: null},
                 validationSubjectInfo: {valid: "", invalid: "", value: null},
                 validationRoomInfo: {valid: "", invalid: "", value: null},
+                validationPresenterInfo: {valid: "", invalid: "", value: null},
+                validationDateInfo: {valid: "", invalid: "", value: null},
                 validationForm: {invalid: "", value: null}
             };
         },
@@ -164,6 +208,9 @@
                         .then(result => {
                             this.currentPresentation = result.data;
                             this.selectedRoomId = this.currentPresentation.room.id;
+                            let presenter = this.currentPresentation.presenters.pop();
+                            if(typeof presenter !== 'undefined')
+                                this.selectedPresenterId = presenter.id;
                             resolve(this.currentPresentation);
                         })
                         .catch(error => {
@@ -205,20 +252,49 @@
                     .catch(error => {
                         console.log(error);
                     });
-            }, updatePresentation(id, user) {
-                PresentationDataService.updatePresentation(id, user)
+            }, async updatePresentation(id) {
+                let valid = await this.validateAll();
+                if (!valid) {
+                    this.validationForm.invalid = "Проверьте правильность заполнения полей формы";
+                    this.validationForm.value = false;
+                    return;
+                }
+
+                PresentationDataService.updatePresentation(id, this.currentPresentation)
                     .then(() => {
                         this.updated = true;
                     })
                     .catch(error => {
                         console.log(error);
                     });
+            }, getPresenters() {
+                return new Promise((resolve, reject) => {
+                    let status = "PRESENTER";
+                    UserDataService.getUsersByStatus(status)
+                        .then(result => {
+                            if (result.data.length === 0)
+                                return;
+
+                            this.presenters = result.data;
+                            this.cmbFormPresenters.push({value: null, text: "Выберете ведущего доклада", disabled: true});
+                            this.presenters.forEach(obj => {
+                                this.cmbFormPresenters.push({value: obj.id, text: obj.fullName});
+                            });
+                            resolve(this.presenters);
+                        })
+                        .catch(error => {
+                            reject(error);
+                        })
+
+                })
             }, validateAll() {
                 return new Promise((resolve) => {
                     let valid = this.validateTitle();
                     valid = this.validateSubject() && valid;
                     valid = this.validateLasts() && valid;
+                    valid = this.validateDate() && valid;
                     valid = this.validateRoom() && valid;
+                    valid = this.validatePresenter() && valid;
                     resolve(valid);
                 })
             }, validateTitle() {
@@ -229,12 +305,17 @@
                 return ValidatePresentationFormUtil.validateSubject(this);
             }, validateRoom() {
                 return ValidatePresentationFormUtil.validateRoom(this);
+            }, validatePresenter() {
+                return ValidatePresentationFormUtil.validatePresenter(this);
+            }, validateDate() {
+                return ValidatePresentationFormUtil.validateDate(this);
             }
         },
         created: async function () {
             try {
-                await this.getPresentationById(this.$route.params.id);
                 await this.getRooms();
+                await this.getPresenters();
+                await this.getPresentationById(this.$route.params.id);
                 this.validateAll();
             } catch (e) {
                 console.log(e);

@@ -1,7 +1,8 @@
 package com.arty.simpleCRUD.controllers;
 
 import com.arty.simpleCRUD.domains.Presentation;
-import com.arty.simpleCRUD.repos.PresentationRepository;
+import com.arty.simpleCRUD.domains.Room;
+import com.arty.simpleCRUD.repos.IPresentationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
+
 
 @CrossOrigin(origins = "http://localhost:3000")
 //@CrossOrigin(origins = "http://localhost:8080")
@@ -20,7 +23,7 @@ import java.util.Map;
 public class PresentationController
 {
     @Autowired
-    private PresentationRepository presentationRepository;
+    private IPresentationRepository presentationRepository;
 
     @GetMapping("/presentations")
     public ResponseEntity<Map<String, Object>> getAllPresentations(@RequestParam(required = false) String searchStr,
@@ -33,8 +36,8 @@ public class PresentationController
 
             if (searchStr == null || searchStr.length() == 0)
                 presentations = presentationRepository.findAll(paging);
-            /*else
-                presentationRepository.findByNameContaining(name).forEach(Presentations::add);*/
+            else
+                presentations = presentationRepository.findPresentationByTitleContaining(searchStr, paging);
 
             if (presentations.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -111,10 +114,22 @@ public class PresentationController
                 newPresentation.setSubject(presentation.getSubject());
                 newPresentation.setTitle(presentation.getTitle());
                 newPresentation.setLasts(presentation.getLasts());
+                newPresentation.setDate(presentation.getDate());
+                newPresentation.setPresenters(presentation.getPresenters());
                 newPresentation = presentationRepository.save(newPresentation);
             }
 
             return new ResponseEntity<>(newPresentation, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/presentations/getByRoom")
+    public ResponseEntity<List<Presentation>> getPresentationsByRoom(@RequestBody Room room) {
+        try {
+            List<Presentation> l = presentationRepository.findPresentationsByRoom(room);
+            return new ResponseEntity<>(l, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -1,5 +1,7 @@
 package com.arty.simpleCRUD.domains;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -49,5 +51,11 @@ public class Room
     public void setPresentations(List<Presentation> presentations)
     {
         this.presentations = presentations;
+    }
+
+    @JsonIgnore
+    public List<Presentation> getPresentations ()
+    {
+        return presentations;
     }
 }

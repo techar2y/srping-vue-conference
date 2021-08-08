@@ -2,10 +2,10 @@
     <div class="list row">
         <div class="col-md-8">
             <div class="input-group mb-3">
-                <b-form-input id="input-1" v-model="searchStr" placeholder="Поиск по логину">
+                <b-form-input id="input-1" v-model="searchStr" placeholder="Поиск по заголовку">
                 </b-form-input>
                 <div class="input-group-append">
-                    <b-button variant="outline-info" @click="searchPresentation">Искать</b-button>
+                    <b-button variant="outline-info" @click="getAllPresentations">Искать</b-button>
                 </div>
             </div>
         </div>
@@ -79,10 +79,16 @@
                     <label><strong>Описание:</strong></label> {{ currentPresentation.description }}
                 </div>
                 <div>
+                    <label><strong>Дата:</strong></label> {{ currentPresentation.date }}
+                </div>
+                <div>
                     <label><strong>Длительность:</strong></label> {{ currentPresentation.lasts }}
                 </div>
                 <div>
                     <label><strong>Аудитория:</strong></label> {{ currentPresentation.room.number }}
+                </div>
+                <div v-if="currentPresenter != null">
+                    <label><strong>Преподаватель:</strong></label> {{ currentPresenter.fullName }}
                 </div>
 
                 <b-button v-bind:to="`/presentations/` + currentPresentation.id" variant="warning" size="sm"
@@ -107,6 +113,7 @@
             return {
                 presentations: [],
                 currentPresentation: null,
+                currentPresenter: null,
                 currentIndex: -1,
                 searchStr: "",
                 pending: false,
@@ -134,20 +141,10 @@
                         console.log(e);
                     })
             },
-            searchPresentation() {
-                PresentationDataService.findByTitle(this.searchStr)
-                    .then((response) => {
-                        this.presentations = [];
-                        if (typeof response.data.presentations !== "undefined")
-                            this.presentations = response.data.presentations;
-
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
-            },
             setActivePresentation(presentation, index) {
                 this.currentPresentation = presentation;
+                console.log(this.currentPresentation);
+                this.currentPresenter = this.currentPresentation.presenters.pop();
                 this.currentIndex = presentation ? index : -1;
             },
             deleteAllPresentations() {
@@ -165,7 +162,7 @@
                 let params = {};
 
                 if (searchStr) {
-                    params["title"] = searchStr;
+                    params["searchStr"] = searchStr;
                 }
 
                 if (page) {

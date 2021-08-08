@@ -5,7 +5,7 @@
                 <b-form-input id="input-1" v-model="searchStr" placeholder="Поиск по логину">
                 </b-form-input>
                 <div class="input-group-append">
-                    <b-button variant="outline-info" @click="searchUser">Искать</b-button>
+                    <b-button variant="outline-info" @click="getAllUsers">Искать</b-button>
                 </div>
             </div>
         </div>
@@ -134,18 +134,6 @@
                         console.log(e);
                     });
             },
-            searchUser() {
-                UserDataService.findUserByLogin(this.searchStr)
-                    .then((response) => {
-                        this.users = [];
-                        if (typeof response.data.users !== "undefined")
-                            this.users = response.data.users;
-
-                    })
-                    .catch(e => {
-                        console.log(e);
-                    });
-            },
             setActiveUser(user, index) {
                 this.currentUser = user;
                 this.currentIndex = user ? index : -1;
@@ -165,7 +153,7 @@
                 let params = {};
 
                 if (searchStr) {
-                    params["title"] = searchStr;
+                    params["searchStr"] = searchStr;
                 }
 
                 if (page) {

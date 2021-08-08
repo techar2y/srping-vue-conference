@@ -34,6 +34,10 @@ class PresentationDataService {
     savePresentation(data) {
         return http.post(this.defaultPath + "/presentations", data);
     }
+
+    getPresentationsByRoom(room) {
+        return http.post(this.defaultPath + `/presentations/getByRoom`, room );
+    }
 }
 
 export default new PresentationDataService()

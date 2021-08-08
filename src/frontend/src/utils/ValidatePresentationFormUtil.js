@@ -12,8 +12,8 @@ class ValidatePresentationFormUtil {
             context.validationTitleInfo.value = true;
             return context.validationTitleInfo.value;
         }
-    } 
-    
+    }
+
     validateRoom(context) {
         if (context.selectedRoomId == null) {
             context.validationRoomInfo.value = false;
@@ -26,7 +26,7 @@ class ValidatePresentationFormUtil {
         context.validationRoomInfo.value = true;
         return context.validationRoomInfo.value;
     }
-    
+
     validateLasts(context) {
         if (context.currentPresentation.lasts.length === 0) {
             context.validationLastsInfo.invalid = "Введите продолжительность доклада";
@@ -36,7 +36,7 @@ class ValidatePresentationFormUtil {
         context.validationLastsInfo.value = true;
         return context.validationLastsInfo.value;
     }
-    
+
     validateSubject(context) {
         if (context.currentPresentation.subject.length < 1) {
             context.validationSubjectInfo.invalid = "Пожалуйста введите название предмета";
@@ -47,7 +47,28 @@ class ValidatePresentationFormUtil {
         context.validationSubjectInfo.value = true;
         return context.validationSubjectInfo.value;
     }
-    
+
+    validatePresenter(context) {
+        if (context.selectedPresenterId == null) {
+            context.validationPresenterInfo.value = false;
+            return context.validationPresenterInfo.value;
+        }
+
+        let presenter = context.presenters.find(x => x.id === context.selectedPresenterId);
+        context.currentPresentation.presenters.push(presenter);
+        context.validationPresenterInfo.value = true;
+        return context.validationPresenterInfo.value;
+    }
+
+    validateDate(context) {
+        if (context.currentPresentation.date.length === 0) {
+            context.validationDateInfo.invalid = "Нужно выбрать дату доклада";
+            context.validationDateInfo.value = false;
+            return context.validationDateInfo.value;
+        }
+        context.validationDateInfo.value = true;
+        return context.validationDateInfo.value;
+    }
 }
 
 export default new ValidatePresentationFormUtil()

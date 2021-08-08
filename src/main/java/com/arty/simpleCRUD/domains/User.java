@@ -1,10 +1,12 @@
 package com.arty.simpleCRUD.domains;
 
-import com.arty.simpleCRUD.domains.Company;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "users")
+@Table(name = "usrs")
 public class User
 {
     @Id
@@ -21,19 +23,22 @@ public class User
     @JoinColumn(name = "role_id")
     private Role role;
 
-    //private String role;
+    @ManyToMany(mappedBy = "presenters")
+    private List<Presentation> presentations;
+
 
     public User()
     {
 
     }
 
-    public User(String fullName, String login, String email, Role role)
+    public User(String fullName, String login, String email, Role role, List<Presentation> presentations)
     {
         this.fullName = fullName;
         this.login = login;
         this.email = email;
         this.role = role;
+        this.presentations = presentations;
     }
 
     public Long getId ()
@@ -84,5 +89,16 @@ public class User
     public void setRole(Role role)
     {
         this.role = role;
+    }
+
+    public void setPresentations(List<Presentation> presentations)
+    {
+        this.presentations = presentations;
+    }
+
+    @JsonIgnore
+    public List<Presentation> getPresentations ()
+    {
+        return presentations;
     }
 }
