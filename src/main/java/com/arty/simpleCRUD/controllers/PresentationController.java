@@ -9,23 +9,23 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:3000")
-//@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/presentations")
 public class PresentationController
 {
     @Autowired
     private IPresentationRepository presentationRepository;
 
-    @GetMapping("/presentations")
+    @GetMapping("/getAllPresentations")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getAllPresentations(@RequestParam(required = false) String searchStr,
                                                                  @RequestParam(defaultValue="0") int page,
                                                                  @RequestParam(defaultValue="3") int pageSize){
@@ -55,7 +55,8 @@ public class PresentationController
         }
     }
 
-    @DeleteMapping("/presentations")
+    @DeleteMapping("/deleteAllPresentations")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Presentation> deleteAllPresentations(){
         try {
             presentationRepository.deleteAll();
@@ -65,7 +66,8 @@ public class PresentationController
         }
     }
 
-    @PostMapping("/presentations")
+    @PostMapping("/createPresentation")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Presentation> createPresentation(@RequestBody Presentation presentation){
         try {
             Presentation _presentation = presentationRepository.save(presentation);
@@ -75,7 +77,8 @@ public class PresentationController
         }
     }
 
-    @GetMapping("/presentations/{id}")
+    @GetMapping("/getPresentationById/{id}")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Presentation> getPresentationById(@PathVariable("id") Long id){
         try {
             Presentation presentation = presentationRepository.getById(id);
@@ -89,7 +92,8 @@ public class PresentationController
         }
     }
 
-    @DeleteMapping("/presentations/{id}")
+    @DeleteMapping("/deletePresentationById/{id}")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Presentation> deletePresentationById(@PathVariable("id") Long id){
         try {
             presentationRepository.deleteById(id);
@@ -100,7 +104,8 @@ public class PresentationController
         }
     }
 
-    @PutMapping("/presentations/{id}")
+    @PutMapping("/updatePresentation/{id}")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
     public ResponseEntity<Presentation> updatePresentation(@PathVariable("id") Long id, @RequestBody Presentation presentation){
         try {
             Presentation newPresentation = presentationRepository.getById(id);
@@ -116,6 +121,7 @@ public class PresentationController
                 newPresentation.setLasts(presentation.getLasts());
                 newPresentation.setDate(presentation.getDate());
                 newPresentation.setPresenters(presentation.getPresenters());
+                newPresentation.setStartTime(presentation.getStartTime());
                 newPresentation = presentationRepository.save(newPresentation);
             }
 
@@ -125,11 +131,30 @@ public class PresentationController
         }
     }
 
-    @PostMapping("/presentations/getByRoom")
-    public ResponseEntity<List<Presentation>> getPresentationsByRoom(@RequestBody Room room) {
+    @PostMapping("/getPresentationsByRoom")
+    //@PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    public ResponseEntity<Map<String, Object>> getPresentationsByRoom(@RequestBody Room room,
+                                                                      @RequestParam(defaultValue="0") int page,
+                                                                     @RequestParam(defaultValue="10") int pageSize) {
         try {
-            List<Presentation> l = presentationRepository.findPresentationsByRoom(room);
-            return new ResponseEntity<>(l, HttpStatus.OK);
+
+            Pageable paging = PageRequest.of(page, pageSize);
+
+            Page<Presentation> presentations = null;
+
+            presentations = presentationRepository.findPresentationsByRoom(room, paging);
+
+            if (presentations.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("presentations", presentations.getContent());
+            response.put("currentPage", presentations.getTotalPages());
+            response.put("totalItems", presentations.getTotalElements());
+            response.put("totalPages", presentations.getTotalPages());
+
+            return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }

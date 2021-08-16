@@ -1,5 +1,6 @@
 package com.arty.simpleCRUD.repos;
 
+import com.arty.simpleCRUD.domains.ERole;
 import com.arty.simpleCRUD.domains.Role;
 import com.arty.simpleCRUD.domains.User;
 import org.springframework.data.domain.Page;
@@ -10,20 +11,29 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface IUserRepository extends JpaRepository<User, Long>
 {
-    Page<User> findUserByLoginContaining(String login, Pageable paging);
+    Page<User> findUserByUsernameContaining(String username, Pageable paging);
 
     User getUserById(Long id);
 
-    List<User> findUsersByLoginAndIdNot(String login, Long id);
+    List<User> findUsersByUsernameAndIdNot(String username, Long id);
 
     List<User> findUsersByEmailAndIdNot(String email, Long id);
 
-    @Query(value = "SELECT * FROM usrs u JOIN roles r ON u.role_id = r.id WHERE r.status = :status",
+    /*@Query(value = "SELECT * FROM users u JOIN roles r ON u.role_id = r.id WHERE r.status = :status",
             nativeQuery = true)
-    List<User> findUsersByStatusRoleNamedParamsNative(@Param("status") String status);
+    List<User> findUsersByStatusRoleNamedParamsNative(@Param("status") String status);*/
+
+    List<User> findUsersByRolesName(ERole name);
+
+    Optional<User> findByUsername(String username);
+
+    Boolean existsByUsername(String username);
+
+    Boolean existsByEmail(String email);
 
 }

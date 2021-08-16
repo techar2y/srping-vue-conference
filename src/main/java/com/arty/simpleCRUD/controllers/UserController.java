@@ -3,32 +3,29 @@ package com.arty.simpleCRUD.controllers;
 import com.arty.simpleCRUD.domains.Role;
 import com.arty.simpleCRUD.domains.User;
 import com.arty.simpleCRUD.repos.IUserRepository;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000")
-///@CrossOrigin(origins = "http://localhost:8080")
+@CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/users")
 public class UserController
 {
     @Autowired
     private IUserRepository userRepository;
 
-    @GetMapping("/users")
+    @GetMapping("/getAllUsers")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam(required = false) String searchStr,
                                                            @RequestParam(defaultValue="0") int page,
                                                            @RequestParam(defaultValue="3") int pageSize){
@@ -39,7 +36,7 @@ public class UserController
             if (searchStr == null || searchStr.length() == 0)
                 users = userRepository.findAll(paging);
             else
-                users = userRepository.findUserByLoginContaining(searchStr, paging);
+                users = userRepository.findUserByUsernameContaining(searchStr, paging);
 
             if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -57,7 +54,8 @@ public class UserController
         }
     }
 
-    @DeleteMapping("/users")
+    @DeleteMapping("/deleteAllUsers")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteAllUsers(){
         try {
             userRepository.deleteAll();
@@ -67,7 +65,8 @@ public class UserController
         }
     }
 
-    @PostMapping("/users")
+    @PostMapping("/createUser")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try {
             User _user = userRepository.save(user);
@@ -77,7 +76,8 @@ public class UserController
         }
     }
 
-    @GetMapping("/users/{id}")
+    @GetMapping("/getUserById/{id}")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
         try {
             User user = userRepository.getUserById(id);
@@ -91,7 +91,8 @@ public class UserController
         }
     }
 
-    @DeleteMapping("/users/{id}")
+    @DeleteMapping("/deleteUserById/{id}")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") Long id){
         try {
             userRepository.deleteById(id);
@@ -102,7 +103,8 @@ public class UserController
         }
     }
 
-    @PutMapping("/users/{id}")
+    @PutMapping("/updateUser/{id}")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user){
         try {
             User newUser = userRepository.getUserById(id);
@@ -113,8 +115,8 @@ public class UserController
             if (user != null) {
                 newUser.setFullName(user.getFullName());
                 newUser.setEmail(user.getEmail());
-                newUser.setLogin(user.getLogin());
-                newUser.setRole(user.getRole());
+                newUser.setUsername(user.getUsername());
+                newUser.setRoles(user.getRoles());
                 newUser = userRepository.save(newUser);
             }
 
@@ -124,10 +126,11 @@ public class UserController
         }
     }
 
-    @GetMapping("/users/isLoginUnique")
-    public ResponseEntity<Integer> isLoginUnique(@RequestParam String login, @RequestParam Long id) {
+    @GetMapping("/isLoginUnique")
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Integer> isLoginUnique(@RequestParam String username, @RequestParam Long id) {
         try {
-            List<User> users = userRepository.findUsersByLoginAndIdNot(login, id);
+            List<User> users = userRepository.findUsersByUsernameAndIdNot(username, id);
 
             return new ResponseEntity<>(users.size(), HttpStatus.OK);
         } catch (Exception e) {
@@ -135,7 +138,8 @@ public class UserController
         }
     }
 
-    @GetMapping("/users/isEmailUnique")
+    @GetMapping("/isEmailUnique")
+    //@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Integer> isEmailUnique(@RequestParam String email, @RequestParam Long id) {
         try {
             List<User> users = userRepository.findUsersByEmailAndIdNot(email, id);
@@ -146,11 +150,12 @@ public class UserController
         }
     }
 
-    @GetMapping("/users/getUsersByStatus")
-    public ResponseEntity<List<User>> getUsersByStatus(@RequestParam String status) {
+    @PostMapping("/getUsersByUserRole")
+    //@PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<User>> getUsersByUserRole(@RequestBody Role role) {
         try {
 
-            List<User> users = userRepository.findUsersByStatusRoleNamedParamsNative(status);
+            List<User> users = userRepository.findUsersByRolesName(role.getName());
 
             return new ResponseEntity<>(users, HttpStatus.OK);
         } catch (Exception e) {

@@ -3,10 +3,19 @@ package com.arty.simpleCRUD.domains;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "usrs")
+@Table(	name = "users",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = "username"),
+                @UniqueConstraint(columnNames = "email")
+        })
 public class User
 {
     @Id
@@ -15,13 +24,24 @@ public class User
 
     private String fullName;
 
-    private String login;
+    @NotBlank
+    @Size(max = 20)
+    private String username;
 
+    @NotBlank
+    @Size(max = 50)
+    @Email
     private String email;
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    @NotBlank
+    @Size(max = 120)
+    private String password;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(	name = "user_roles",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private Set<Role> roles = new HashSet<>();
 
     @ManyToMany(mappedBy = "presenters")
     private List<Presentation> presentations;
@@ -32,13 +52,12 @@ public class User
 
     }
 
-    public User(String fullName, String login, String email, Role role, List<Presentation> presentations)
+    public User(String fullName, String username, String email, String password)
     {
         this.fullName = fullName;
-        this.login = login;
+        this.username = username;
         this.email = email;
-        this.role = role;
-        this.presentations = presentations;
+        this.password = password;
     }
 
     public Long getId ()
@@ -61,14 +80,14 @@ public class User
         this.fullName = fullName;
     }
 
-    public String getLogin ()
+    public String getUsername ()
     {
-        return login;
+        return username;
     }
 
-    public void setLogin (String login)
+    public void setUsername (String username)
     {
-        this.login = login;
+        this.username = username;
     }
 
     public String getEmail ()
@@ -81,14 +100,24 @@ public class User
         this.email = email;
     }
 
-    public Role getRole()
+    public String getPassword()
     {
-        return role;
+        return password;
     }
 
-    public void setRole(Role role)
+    public void setPassword(String password)
     {
-        this.role = role;
+        this.password = password;
+    }
+
+    public Set<Role> getRoles()
+    {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles)
+    {
+        this.roles = roles;
     }
 
     public void setPresentations(List<Presentation> presentations)

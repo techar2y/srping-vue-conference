@@ -13,11 +13,11 @@ public class Role
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 20)
+    private ERole name;
 
-    private String name;
-
-    @OneToMany(mappedBy = "role")
+    @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
     public Role ()
@@ -25,8 +25,7 @@ public class Role
 
     }
 
-    public Role (String status, String name) {
-        this.status = status;
+    public Role (ERole name) {
         this.name = name;
     }
 
@@ -40,22 +39,12 @@ public class Role
         this.id = id;
     }
 
-    public String getStatus()
-    {
-        return status;
-    }
-
-    public void setStatus(String status)
-    {
-        this.status = status;
-    }
-
-    public String getName()
+    public ERole getName()
     {
         return name;
     }
 
-    public void setName(String name)
+    public void setName(ERole name)
     {
         this.name = name;
     }

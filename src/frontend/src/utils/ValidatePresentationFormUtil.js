@@ -37,6 +37,17 @@ class ValidatePresentationFormUtil {
         return context.validationLastsInfo.value;
     }
 
+    validateStartTime(context) {
+        if (context.currentPresentation.startTime.length === 0) {
+            context.validationStartTimeInfo.invalid = "Введите время начало доклада";
+            context.validationStartTimeInfo.value = false;
+            return context.validationStartTimeInfo.value;
+        }
+        context.validationStartTimeInfo.value = true;
+        return context.validationStartTimeInfo.value;
+    }
+
+
     validateSubject(context) {
         if (context.currentPresentation.subject.length < 1) {
             context.validationSubjectInfo.invalid = "Пожалуйста введите название предмета";

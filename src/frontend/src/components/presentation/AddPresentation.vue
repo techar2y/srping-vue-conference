@@ -1,135 +1,164 @@
 <template>
-    <div class="submit-form">
-        <div v-if="!submitted">
-            <h4 style="text-align: center">Новый доклад</h4>
+    <b-container>
+        <b-form class="submit-form" v-if="!submitted">
+            <b-card bg-variant="light">
+                <b-form-group
+                        label-cols-lg="3"
+                        label="Новый доклад"
+                        label-size="lg"
+                        label-class="font-weight-bold pt-0"
+                        class="mb-0"
+                >
 
-            <div class="form-group">
-                <label>Заголовок доклада</label>
-                <b-form-input
-                        type="text"
-                        class="form-control"
-                        id="title"
-                        required
-                        v-model="currentPresentation.title"
-                        name="title"
-                        placeholder="Чем интересней заголовок тем больше студентов придёт на доклад"
-                        :state="validationTitleInfo.value" @input="validateTitle">
-                </b-form-input>
+                    <b-form-group>
+                        <b-label for="title">Тема доклада</b-label>
+                        <b-form-input
+                                type="text"
+                                id="title"
+                                name="title"
+                                v-model="currentPresentation.title"
+                                placeholder="Чем интересней заголовок тем больше студентов придёт на доклад"
+                                :state="validationTitleInfo.value" @input="validateTitle">
+                        </b-form-input>
 
-                <b-form-invalid-feedback :state="validationTitleInfo.value" id="titleInvalidFeedback">
-                    {{ validationTitleInfo.invalid }}
-                </b-form-invalid-feedback>
-                <b-form-valid-feedback :state="validationTitleInfo.value" id="titleValidFeedback">
-                    {{ validationTitleInfo.valid }}
-                </b-form-valid-feedback>
-            </div>
+                        <b-form-invalid-feedback :state="validationTitleInfo.value" id="titleInvalidFeedback">
+                            {{ validationTitleInfo.invalid }}
+                        </b-form-invalid-feedback>
+                        <b-form-valid-feedback :state="validationTitleInfo.value" id="titleValidFeedback">
+                            {{ validationTitleInfo.valid }}
+                        </b-form-valid-feedback>
+                    </b-form-group>
 
-            <div class="form-group">
-                <label>Предмет</label>
-                <b-form-input
-                        type="text"
-                        class="form-control"
-                        id="title"
-                        required
-                        v-model="currentPresentation.subject"
-                        name="title"
-                        placeholder="Предмет доклада"
-                        :state="validationSubjectInfo.value" @input="validateSubject">
-                </b-form-input>
+                    <b-form-group>
+                        <b-label for="subject">Предмет</b-label>
+                        <b-form-input
+                                type="text"
+                                id="subject"
+                                name="subject"
+                                v-model="currentPresentation.subject"
+                                placeholder="Предмет доклада"
+                                :state="validationSubjectInfo.value" @input="validateSubject">
+                        </b-form-input>
 
-                <b-form-invalid-feedback :state="validationSubjectInfo.value" id="subjectInvalidFeedback">
-                    {{ validationSubjectInfo.invalid }}
-                </b-form-invalid-feedback>
-                <b-form-valid-feedback :state="validationSubjectInfo.value" id="subjectValidFeedback">
-                    {{ validationSubjectInfo.valid }}
-                </b-form-valid-feedback>
-            </div>
+                        <b-form-invalid-feedback :state="validationSubjectInfo.value" id="subjectInvalidFeedback">
+                            {{ validationSubjectInfo.invalid }}
+                        </b-form-invalid-feedback>
+                        <b-form-valid-feedback :state="validationSubjectInfo.value" id="subjectValidFeedback">
+                            {{ validationSubjectInfo.valid }}
+                        </b-form-valid-feedback>
+                    </b-form-group>
 
-            <div class="form-group">
-                <label>Описание</label>
-                <b-form-textarea
-                        id="textarea"
-                        v-model="currentPresentation.description"
-                        placeholder="Введите что нибудь..."
-                        rows="3"
-                        max-rows="6"
-                ></b-form-textarea>
-            </div>
+                    <b-form-group>
+                        <b-label for="teaxtarea">Описание</b-label>
+                        <b-form-textarea
+                                id="textarea"
+                                name="textarea"
+                                v-model="currentPresentation.description"
+                                placeholder="Введите что нибудь..."
+                                rows="3"
+                                max-rows="6"
+                        ></b-form-textarea>
+                    </b-form-group>
 
-            <div class="form-group">
-                <label>Дата доклада</label>
-                <b-form-datepicker
-                        id="date" v-model="currentPresentation.date" class="mb-2"
-                        :date-format-options="{ year: 'numeric', month: 'numeric', day: 'numeric' }"
-                        locale="ru" placeholder="Выберете дату доклада" @input="validateDate">
-                </b-form-datepicker>
-                <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
-                    {{ validationDateInfo.invalid }}
-                </b-form-invalid-feedback>
-            </div>
+                    <b-form-group>
+                        <b-label for="date">Дата доклада</b-label>
+                        <b-form-input
+                                type="date"
+                                id="date"
+                                name="date"
+                                v-model="currentPresentation.date"
+                                :state="validationDateInfo.value"
+                                @input="validateDate">
+                        </b-form-input>
+                        <b-form-invalid-feedback :state="validationDateInfo.value" id="dateInvalidFeedback">
+                            {{ validationDateInfo.invalid }}
+                        </b-form-invalid-feedback>
+                    </b-form-group>
+
+                    <b-form-group>
+                        <b-label for="start_time">Время начало доклада:&nbsp;</b-label>
+                        <b-form-input
+                                type="time"
+                                id="start_time"
+                                name="start_time"
+                                v-model="currentPresentation.startTime"
+                                :state="validationStartTimeInfo.value"
+                                @input="validateStartTime">
+                        </b-form-input>
+                        <b-form-invalid-feedback :state="validationStartTimeInfo.value"
+                                                 id="startTimeInvalidFeedback">
+                            {{ validationStartTimeInfo.invalid }}
+                        </b-form-invalid-feedback>
+                    </b-form-group>
+
+                    <b-form-group>
+                        <b-label for="lasts">Продолжительность доклада:&nbsp;</b-label>
+                        <b-form-input
+                                type="time"
+                                id="lasts"
+                                name="lasts"
+                                v-model="currentPresentation.lasts"
+                                :state="validationLastsInfo.value"
+                                @input="validateLasts">
+                        </b-form-input>
+
+                        <b-form-invalid-feedback :state="validationLastsInfo.value"
+                                                 id="lastsInvalidFeedback">
+                            {{ validationLastsInfo.invalid }}
+                        </b-form-invalid-feedback>
+                    </b-form-group>
+
+                    <b-form-group>
+                        <b-label for="room">Аудитория</b-label>
+                        <b-form-select
+                                id="room"
+                                name="room"
+                                v-model="selectedRoomId"
+                                :options="rooms"
+                                :state="validationRoomInfo.value"
+                                placeholder="Номер аудитории"
+                                @input="validateRoom"
+                                aria-placeholder="Значение">
+                        </b-form-select>
+                        <b-form-invalid-feedback :state="validationRoomInfo.value" id="roomInvalidFeedback">
+                            {{ validationRoomInfo.invalid }}
+                        </b-form-invalid-feedback>
+                        <b-form-valid-feedback :state="validationRoomInfo.value" id="roomValidFeedback">
+                            {{ validationRoomInfo.valid }}
+                        </b-form-valid-feedback>
+                    </b-form-group>
+
+                    <b-form-group>
+                        <b-label for="presenter">Преподаватель</b-label>
+                        <b-form-select
+                                id="presenter"
+                                name="presenter"
+                                v-model="selectedPresenterId"
+                                :options="cmbFormPresenters"
+                                placeholder="Ведущий"
+                                :state="validationPresenterInfo.value">
+                        </b-form-select>
+
+                        <b-form-invalid-feedback :state="validationPresenterInfo.value" id="presenterInvalidFeedback">
+                            {{ validationPresenterInfo.invalid }}
+                        </b-form-invalid-feedback>
+                        <b-form-valid-feedback :state="validationPresenterInfo.value" id="presenterValidFeedback">
+                            {{ validationPresenterInfo.valid }}
+                        </b-form-valid-feedback>
+                    </b-form-group>
 
 
-            <div class="form-group">
-                <label>Продолжительность доклада:&nbsp;</label>
-                <b-time v-model="currentPresentation.lasts" locale="ru"></b-time>
-                <b-form-invalid-feedback :state="validationLastsInfo.value" id="lastsInvalidFeedback">
-                    {{ validationLastsInfo.invalid }}
-                </b-form-invalid-feedback>
-                <p>{{ currentPresentation.lasts }}</p>
-            </div>
-
-            <div class="form-group">
-                <label>Аудитория</label>
-                <b-form-select
-                        class="form-control"
-                        id="room"
-                        required
-                        v-model="selectedRoomId"
-                        :options="rooms"
-                        :state="validationRoomInfo.value"
-                        name="room"
-                        placeholder="Номер аудитории"
-                        @input="validateRoom"
-                        aria-placeholder="Значение">
-                </b-form-select>
-                <b-form-invalid-feedback :state="validationRoomInfo.value" id="roomInvalidFeedback">
-                    {{ validationRoomInfo.invalid }}
-                </b-form-invalid-feedback>
-                <b-form-valid-feedback :state="validationRoomInfo.value" id="roomValidFeedback">
-                    {{ validationRoomInfo.valid }}
-                </b-form-valid-feedback>
-            </div>
-
-            <div class="form-group">
-                <label>Ведущий</label>
-                <b-form-select
-                        class="form-control"
-                        id="presenter"
-                        required
-                        v-model="selectedPresenterId"
-                        :options="cmbFormPresenters"
-                        name="presenter"
-                        placeholder="Ведущий"
-                        aria-placeholder="Значение">
-                </b-form-select>
-
-                <b-form-invalid-feedback :state="validationPresenterInfo.value" id="presenterInvalidFeedback">
-                    {{ validationPresenterInfo.invalid }}
-                </b-form-invalid-feedback>
-                <b-form-valid-feedback :state="validationPresenterInfo.value" id="presenterValidFeedback">
-                    {{ validationPresenterInfo.valid }}
-                </b-form-valid-feedback>
-            </div>
-
-            <b-button variant="success" style="margin: 10px 5px 0px"
-                      @click="savePresentation">Добавить
-            </b-button>
-            <b-button to="/presentations" variant="danger" style="margin: 10px 5px 0px">Отмена
-            </b-button>
-            <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
-                {{ validationForm.invalid }}
-            </b-form-invalid-feedback>
-        </div>
+                    <b-button variant="success" style="margin: 10px 5px 0px"
+                              @click="createPresentation">Добавить
+                    </b-button>
+                    <b-button to="/presentations" variant="danger" style="margin: 10px 5px 0px">Отмена
+                    </b-button>
+                    <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
+                        {{ validationForm.invalid }}
+                    </b-form-invalid-feedback>
+                </b-form-group>
+            </b-card>
+        </b-form>
 
         <div v-else>
             <h4>Доклад успешно добавлен!</h4>
@@ -139,17 +168,17 @@
                 <b-button to="/presentations" variant="link">Вернуться к списку докладов</b-button>
             </div>
         </div>
-    </div>
+    </b-container>
 </template>
 
 <script>
     import PresentationDataService from "../../services/PresentationDataService";
     import RoomDataService from "../../services/RoomDataService";
     import ValidatePresentationFormUtil from "../../utils/ValidatePresentationFormUtil";
-    import UserDataService from "../../services/UserDataService";
+    import UserDataService from "../../services/user/UserDataService";
 
     export default {
-        name: "addPresentation",
+        name: "presentation-add",
         data() {
             return {
                 currentPresentation: {
@@ -175,10 +204,11 @@
                 validationRoomInfo: {valid: "", invalid: "", value: null},
                 validationPresenterInfo: {valid: "", invalid: "", value: null},
                 validationDateInfo: {valid: "", invalid: "", value: null},
+                validationStartTimeInfo: {valid: "", invalid: "", value: null},
                 validationForm: {invalid: "", value: null}
             }
         }, methods: {
-            async savePresentation() {
+            async createPresentation() {
                 let valid = await this.validateAll();
                 if (!valid) {
                     this.validationForm.invalid = "Проверьте правильность заполнения полей формы";
@@ -186,7 +216,7 @@
                     return;
                 }
 
-                PresentationDataService.savePresentation(this.currentPresentation)
+                PresentationDataService.createPresentation(this.currentPresentation)
                     .then(result => {
                         this.currentPresentation.id = result.data;
                         this.submitted = true;
@@ -216,6 +246,7 @@
                 this.validationDescriptionInfo = {valid: "", invalid: "", value: null};
                 this.validationDateInfo = {valid: "", invalid: "", value: null};
                 this.validationSubjectInfo = {valid: "", invalid: "", value: null};
+                this.validationStartTimeInfo = {valid: "", invalid: "", value: null};
                 this.validationForm = {invalid: "", value: null};
             }, getRooms() {
                 return new Promise((resolve, reject) => {
@@ -250,7 +281,11 @@
                             if (result.data.length === 0)
                                 return;
 
-                            this.cmbFormPresenters.push({value: null, text: "Выберете ведущего доклада", disabled: true});
+                            this.cmbFormPresenters.push({
+                                value: null,
+                                text: "Выберете ведущего доклада",
+                                disabled: true
+                            });
                             this.presenters = result.data;
                             this.presenters.forEach(obj => {
                                 this.cmbFormPresenters.push({value: obj.id, text: obj.fullName});
@@ -270,6 +305,7 @@
                     valid = this.validateDate() && valid;
                     valid = this.validateRoom() && valid;
                     valid = this.validatePresenter() && valid;
+                    valid = this.validateStartTime() && valid;
                     resolve(valid);
                 })
             }, validateTitle() {
@@ -284,6 +320,8 @@
                 return ValidatePresentationFormUtil.validatePresenter(this);
             }, validateDate() {
                 return ValidatePresentationFormUtil.validateDate(this);
+            }, validateStartTime() {
+                return ValidatePresentationFormUtil.validateStartTime(this);
             }
 
         }, created: async function () {
@@ -299,7 +337,7 @@
 
 <style scoped>
     .submit-form {
-        max-width: 450px;
+        max-width: 850px;
         margin: auto;
     }
 </style>

@@ -1,108 +1,133 @@
 <template>
-    <div>
+    <b-container>
         <div v-if="currentUser != null">
             <div v-if="!notFound">
-                <div v-if="!deleted && !updated" class="edit-form">
-                    <h4 style="text-align: center">Редактировать пользователя</h4>
-                    <form v-if="currentUser != null">
-                        <div class="form-group">
-                            <label>Полное имя</label>
-                            <b-form-input
-                                    type="text"
-                                    class="form-control"
-                                    required
-                                    v-model="currentUser.fullName"
-                                    placeholder="Peter Parker"
-                                    name="fullName"
-                                    id="fullName"
-                                    :state="validationFullNameInfo.value" @input="validateFullName">
-                            </b-form-input>
-                            <b-form-invalid-feedback :state="validationFullNameInfo.value" id="fullNameInvalidFeedback">
-                                {{ validationFullNameInfo.invalid }}
-                            </b-form-invalid-feedback>
-                            <b-form-valid-feedback :state="validationFullNameInfo.value" id="fullNameValidFeedback">
-                            </b-form-valid-feedback>
-                        </div>
+                <div v-if="!deleted && !updated">
+                    <b-form class="edit-form">
+                        <b-card bg-variant="light">
+                            <b-form-group
+                                    label-cols-lg="3"
+                                    label="Редактировать пользователя"
+                                    label-size="lg"
+                                    label-class="font-weight-bold pt-0"
+                                    class="mb-0"
+                            >
+                                <b-form-group>
+                                    <b-label>Полное имя</b-label>
+                                    <b-input-group size="sm" class="mb-2">
+                                        <b-input-group-prepend is-text>
+                                            <b-icon icon="person-square"></b-icon>
+                                        </b-input-group-prepend>
+                                        <b-form-input
+                                                type="text"
+                                                class="form-control"
+                                                required
+                                                v-model="currentUser.fullName"
+                                                placeholder="Peter Parker"
+                                                name="fullName"
+                                                id="fullName"
+                                                :state="validationFullNameInfo.value" @input="validateFullName">
+                                        </b-form-input>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validationFullNameInfo.value"
+                                                             id="fullNameInvalidFeedback">
+                                        {{ validationFullNameInfo.invalid }}
+                                    </b-form-invalid-feedback>
+                                    <b-form-valid-feedback :state="validationFullNameInfo.value"
+                                                           id="fullNameValidFeedback">
+                                    </b-form-valid-feedback>
+                                </b-form-group>
 
-                        <div class="form-group">
-                            <label>Логин</label>
-                            <b-form-input
-                                    type="text"
-                                    class="form-control"
-                                    id="login"
-                                    required
-                                    v-model="currentUser.login"
-                                    name="login"
-                                    placeholder="user's login"
-                                    :state="validationLoginInfo.value" @input="validateLogin">
-                            </b-form-input>
+                                <b-form-group>
+                                    <b-label>Логин</b-label>
+                                    <b-input-group size="sm" class="mb-2">
+                                        <b-input-group-prepend is-text>
+                                            <b-icon icon="at"></b-icon>
+                                        </b-input-group-prepend>
+                                        <b-form-input
+                                                type="text"
+                                                class="form-control"
+                                                id="username"
+                                                required
+                                                v-model="currentUser.username"
+                                                name="username"
+                                                placeholder="username"
+                                                :state="validationUsernameInfo.value" @input="validateUsername">
+                                        </b-form-input>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validationUsernameInfo.value"
+                                                             id="usernameInvalidFeedback">
+                                        {{ validationUsernameInfo.invalid }}
+                                    </b-form-invalid-feedback>
+                                    <b-form-valid-feedback :state="validationUsernameInfo.value" id="usernameValidFeedback">
+                                        {{ validationUsernameInfo.valid }}
+                                    </b-form-valid-feedback>
+                                </b-form-group>
 
-                            <b-form-invalid-feedback :state="validationLoginInfo.value" id="loginInvalidFeedback">
-                                {{ validationLoginInfo.invalid }}
-                            </b-form-invalid-feedback>
-                            <b-form-valid-feedback :state="validationLoginInfo.value" id="loginValidFeedback">
-                                {{ validationLoginInfo.valid }}
-                            </b-form-valid-feedback>
-                        </div>
+                                <b-form-group>
+                                    <b-label>Email</b-label>
+                                    <b-input-group size="sm" class="mb-2">
+                                        <b-input-group-prepend is-text>
+                                            <b-icon icon="envelope"></b-icon>
+                                        </b-input-group-prepend>
+                                        <b-form-input
+                                                type="email"
+                                                class="form-control"
+                                                id="email"
+                                                required
+                                                v-model="currentUser.email"
+                                                name="email"
+                                                placeholder="me@example.com"
+                                                :state="validationEmailInfo.value" @input="validateEmail">
+                                        </b-form-input>
+                                    </b-input-group>
+                                    <b-form-invalid-feedback :state="validationEmailInfo.value"
+                                                             id="emailInvalidFeedback">
+                                        {{ validationEmailInfo.invalid }}
+                                    </b-form-invalid-feedback>
+                                    <b-form-valid-feedback :state="validationEmailInfo.value" id="emailValidFeedback">
+                                        {{ validationEmailInfo.valid }}
+                                    </b-form-valid-feedback>
+                                </b-form-group>
 
-                        <div class="form-group">
-                            <label>Email</label>
-                            <b-form-input
-                                    class="form-control"
-                                    id="email"
-                                    required
-                                    v-model="currentUser.email"
-                                    name="email"
-                                    placeholder="example@post.com"
-                                    :state="validationEmailInfo.value" @input="validateEmail">
-                            </b-form-input>
-                            <b-form-invalid-feedback :state="validationEmailInfo.value" id="emailInvalidFeedback">
-                                {{ validationEmailInfo.invalid }}
-                            </b-form-invalid-feedback>
-                            <b-form-valid-feedback :state="validationEmailInfo.value" id="emailValidFeedback">
-                                {{ validationEmailInfo.valid }}
-                            </b-form-valid-feedback>
-                        </div>
+                                <b-form-group>
+                                    <b-label>Статус</b-label>
+                                    <b-form-select
+                                            class="form-control"
+                                            id="role"
+                                            required
+                                            v-model="selectedRoleId"
+                                            :options="roles"
+                                            :state="validationRoleInfo.value"
+                                            name="role"
+                                            placeholder="user's role"
+                                            @input="validateRole"
+                                            aria-placeholder="Значение">
+                                    </b-form-select>
+                                    <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
+                                        {{ validationRoleInfo.invalid }}
+                                    </b-form-invalid-feedback>
+                                    <b-form-valid-feedback :state="validationRoleInfo.value" id="roleValidFeedback">
+                                        {{ validationRoleInfo.valid }}
+                                    </b-form-valid-feedback>
+                                </b-form-group>
 
-                        <div class="form-group">
-                            <label>Статус</label>
-                            <b-form-select
-                                    class="form-control"
-                                    id="role"
-                                    required
-                                    v-model="selectedRoleId"
-                                    :options="roles"
-                                    :state="validationRoleInfo.value"
-                                    name="role"
-                                    placeholder="user's role"
-                                    @input="validateRole"
-                                    aria-placeholder="Значение">
-                            </b-form-select>
-                            <p> {{ currentUser.role }}</p>
-                            <b-form-invalid-feedback :state="validationRoleInfo.value" id="roleInvalidFeedback">
-                                {{ validationRoleInfo.invalid }}
-                            </b-form-invalid-feedback>
-                            <b-form-valid-feedback :state="validationRoleInfo.value" id="roleValidFeedback">
-                                {{ validationRoleInfo.valid }}
-                            </b-form-valid-feedback>
-                        </div>
+                                <b-button @click="updateUser(currentUser.id, currentUser)"
+                                          variant="outline-success" style="margin: 5px 5px 5px 0px">
+                                    Обновить
+                                </b-button>
 
-                    </form>
+                                <b-button @click="deleteUserById(currentUser.id)"
+                                          variant="outline-danger" style="margin: 5px 5px 5px 0px">
+                                    Удалить
+                                </b-button>
 
-                    <b-button @click="updateUser(currentUser.id, currentUser)"
-                              variant="outline-success" style="margin: 5px 5px 5px 0px">
-                        Обновить
-                    </b-button>
-
-                    <b-button @click="deleteUserById(currentUser.id)"
-                              variant="outline-danger" style="margin: 5px 5px 5px 0px">
-                        Удалить
-                    </b-button>
-
-                    <b-button to="/users" variant="outline-secondary" style="margin: 5px 5px 5px 0px">
-                        Отмена
-                    </b-button>
-
+                                <b-button to="/users" variant="outline-secondary" style="margin: 5px 5px 5px 0px">
+                                    Отмена
+                                </b-button>
+                            </b-form-group>
+                        </b-card>
+                    </b-form>
                 </div>
 
                 <div v-else-if="deleted">
@@ -130,19 +155,16 @@
                 <b-spinner label="Loading..."></b-spinner>
             </div>
         </div>
+    </b-container>
 
-        <!--div>
-            <b-button to="/users" variant="link">Вернуться к списку пользователей</b-button>
-        </div-->
-    </div>
 </template>
 
 <script>
-    import UserDataService from "../../services/UserDataService";
+    import UserDataService from "../../services/user/UserDataService";
     import RoleDataService from "../../services/RoleDataService";
 
     export default {
-        name: "user-details",
+        name: "user-edit",
         data() {
             return {
                 notFound: false,
@@ -152,7 +174,7 @@
                 selectedRoleId: null,
                 roles: [],
                 validationFullNameInfo: {valid: "", invalid: "", value: null},
-                validationLoginInfo: {valid: "", invalid: "", value: null},
+                validationUsernameInfo: {valid: "", invalid: "", value: null},
                 validationEmailInfo: {valid: "", invalid: "", value: null},
                 validationRoleInfo: {valid: "", invalid: "", value: null},
                 validationForm: {invalid: "", value: null}
@@ -230,28 +252,28 @@
                 } else
                     this.validationFullNameInfo.value = true;
             },
-            async validateLogin() {
-                if (this.currentUser.login.length < 2) {
-                    this.validationLoginInfo.invalid = "Логин не может стостоять меньше чем из двух символов";
-                    this.validationLoginInfo.value = false;
-                    return this.validationLoginInfo.value;
+            async validateUsername() {
+                if (this.currentUser.username.length < 2) {
+                    this.validationUsernameInfo.invalid = "Логин не может стостоять меньше чем из двух символов";
+                    this.validationUsernameInfo.value = false;
+                    return this.validationUsernameInfo.value;
                 }
 
-                if (this.currentUser.login.length > 64) {
-                    this.validationLoginInfo.invalid = "Логин не может превышать 64 символа";
-                    this.validationLoginInfo.value = false;
-                    return this.validationLoginInfo.value;
+                if (this.currentUser.username.length > 64) {
+                    this.validationUsernameInfo.invalid = "Логин не может превышать 64 символа";
+                    this.validationUsernameInfo.value = false;
+                    return this.validationUsernameInfo.value;
                 }
 
-                UserDataService.isLoginUnique(this.currentUser.login, this.currentUser.id)
+                UserDataService.isUsernameUnique(this.currentUser.username, this.currentUser.id)
                     .then(response => {
                         if (response.data > 0) {
-                            this.validationLoginInfo.invalid = "Такой логин уже занят";
-                            this.validationLoginInfo.value = false;
+                            this.validationUsernameInfo.invalid = "Такой логин уже занят";
+                            this.validationUsernameInfo.value = false;
                             return this.validationFullNameInfo.value;
                         }
 
-                        this.validationLoginInfo.value = true;
+                        this.validationUsernameInfo.value = true;
                         return this.validationFullNameInfo.value;
                     })
                     .catch(error => {
@@ -293,7 +315,7 @@
             },
             validateAll() {
                 this.validateFullName();
-                this.validateLogin();
+                this.validateUsername();
                 this.validateEmail();
                 this.validateRole();
             }
@@ -311,7 +333,7 @@
 
 <style scoped>
     .edit-form {
-        max-width: 450px;
+        max-width: 850px;
         margin: auto;
     }
 </style>

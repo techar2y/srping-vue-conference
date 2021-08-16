@@ -1,42 +1,39 @@
 import http from "../../http-common";
 
+const API_URL = "/presentations";
+
 class PresentationDataService {
-    defaultPath = "http://localhost:8080/api";
 
     getAllPresentations(params) {
-        return http.get(this.defaultPath + "/presentations", {params: params});
+        return http.get(`${API_URL}/getAllPresentations`, {params: params});
     }
 
-    getById(id) {
-        return http.get(this.defaultPath + `/presentations/${id}`);
-    }
-
-    create(data) {
-        return http.post(this.defaultPath + "/presentations", data);
+    getPresentationById(id) {
+        return http.get(`${API_URL}/getPresentationById/${id}`);
     }
 
     findByTitle(title) {
-        return http.get(this.defaultPath + `/presentations?title=${title}`);
+        return http.get(`${API_URL}/?title=${title}`);
     }
 
     deleteAllPresentations() {
-        return http.delete(this.defaultPath + "/presentations");
+        return http.delete(`${API_URL}/deleteAllPresentations`);
     }
 
     deletePresentationById(id) {
-        return http.delete(this.defaultPath + `/presentations/${id}`);
+        return http.delete(`${API_URL}/deletePresentationById/${id}`);
     }
 
     updatePresentation(id, schedule) {
-        return http.put(this.defaultPath + `/presentations/${id}`, schedule);
+        return http.put(`${API_URL}/updatePresentation/${id}`, schedule);
     }
 
-    savePresentation(data) {
-        return http.post(this.defaultPath + "/presentations", data);
+    createPresentation(data) {
+        return http.post(`${API_URL}/createPresentation`, data);
     }
 
-    getPresentationsByRoom(room) {
-        return http.post(this.defaultPath + `/presentations/getByRoom`, room );
+    getPresentationsByRoom(room, params) {
+        return http.post(`${API_URL}/getByRoom`, room, {params: params} );
     }
 }
 

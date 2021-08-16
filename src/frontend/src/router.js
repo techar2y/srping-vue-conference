@@ -47,63 +47,78 @@ import Router from "vue-router";
 
 Vue.use(Router);
 
-export default new Router({
+let router = new Router({
     mode: "history",
     routes: [
         {
             path: "/presentation",
             alias: "/presentations",
-            name: "presentations",
+            name: "presentations-list",
             component: () => import("./components/presentation/PresentationsList")
         },
+
         {
             path: "/presentations/:id",
-            name: "presentation-details",
+            name: "presentation-edit",
             component: () => import("./components/presentation/Presentation")
         },
+
         {
             path: "/addPresentation",
-            name: "addPresentation",
+            name: "presentation-add",
             component: () => import("./components/presentation/AddPresentation")
         },
+
         {
             path: "/users",
-            alias: "/users",
-            name: "users",
+            name: "users-list",
             component: () => import("./components/user/UsersList")
         },
+
         {
             path: "/users/:id",
-            name: "user-details",
+            name: "user-edit",
             component: () => import("./components/user/User")
         },
+
         {
             path: "/addUser",
-            name: "addUser",
+            name: "user-add",
             component: () => import("./components/user/AddUser")
         },
 
 
         {
-            path: "/",
-            alias: "/tutorials",
-            name: "tutorials",
-            component: () => import("./components/tutorials/TutorialsList")
-        },
-        {
-            path: "/tutorials/:id",
-            name: "tutorial-details",
-            component: () => import("./components/tutorials/Tutorial")
-        },
-        {
-            path: "/add",
-            name: "add",
-            component: () => import("./components/tutorials/AddTutorial")
-        },
-        {
             path: "/schedules",
-            name: "SchedulesList",
+            name: "schedules-list",
             component: () => import("./components/schedule/SchedulesList")
+        },
+
+        {
+            path: "/login",
+            name: "login",
+            component: () => import("./components/auth/Login")
+        },
+
+        {
+            path: "/register",
+            name: "register",
+            component: () => import("./components/auth/Register")
         }
     ]
+
 });
+
+router.beforeEach((to, from, next) => {
+    const publicPages = ['/login', '/register', '/home'];
+    const authRequired = !publicPages.includes(to.path);
+    const loggedIn = localStorage.getItem('user');
+
+    if (authRequired && !loggedIn) {
+        next('/login');
+    } else {
+        next();
+    }
+});
+
+export default router;

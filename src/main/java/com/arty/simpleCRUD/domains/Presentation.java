@@ -23,6 +23,8 @@ public class Presentation
     @JoinColumn(name = "room_id")
     private Room room;
 
+    private String startTime;
+
     private String lasts;
 
     private String date;
@@ -38,14 +40,15 @@ public class Presentation
 
     }
 
-    public Presentation(String subject, String description, String title,
-                        Room room, String lasts, String date, List<User> presenters) {
+    public Presentation(String subject, String description, String title, Room room,
+                        String lasts, String date, String startTime, List<User> presenters) {
         this.subject = subject;
         this.description = description;
         this.title = title;
         this.room = room;
         this.lasts = lasts;
         this.date = date;
+        this.startTime = startTime;
         this.presenters = presenters;
     }
 
@@ -127,5 +130,15 @@ public class Presentation
     public void setPresenters (List<User> presenters)
     {
         this.presenters = presenters;
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime)
+    {
+        this.startTime = startTime;
     }
 }
