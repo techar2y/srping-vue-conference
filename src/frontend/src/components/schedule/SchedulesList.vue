@@ -21,14 +21,15 @@
                         v-model="page"
                         :total-rows="pageCount"
                         :per-page="pageSize"
+                        align="fill"
                         @change="handlePageChange"
                 ></b-pagination>
             </b-col>
         </b-row>
         <b-row align-h="center">
-            <b-col sm="8">
-                <b-table responsive striped hover bordered
-                         :items="items" :fields="flds"></b-table>
+            <b-col sm="10">
+                <b-table striped hover bordered
+                         :items="items" :fields="flds" variant="dark"  class="content"></b-table>
             </b-col>
         </b-row>
     </b-container>
@@ -45,7 +46,8 @@
                 items: [],
                 flds: [{key: "subject", label: "Предмет", sortable: true}, {key: "title", label: "Тема доклада"},
                     {key: "room.number", label: "Аудитория"}, {key: "date", label: "Дата", sortable: true},
-                    {key: "lasts", label: "Длительность", sortable: true }],
+                    {key: "startTime", label: "Время начала" }, {key: "lasts", label: "Длительность", sortable: true },
+                    {key: "presenters[0].fullName", label: "Преподаватель" } ],
                 rooms: [],
                 cmbFormRooms: [],
                 selectedRoomId: null,
@@ -120,5 +122,7 @@
 </script>
 
 <style scoped>
-
+    .content {
+        background-color: #f3f3f3;
+    }
 </style>

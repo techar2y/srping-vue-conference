@@ -5,7 +5,7 @@ const API_URL = '/auth';
 
 class AuthService {
     login(user) {
-        http.post(`${API_URL}/signin`, {
+        return http.post(`${API_URL}/signin`, {
             username: user.username,
             password: user.password
         }).then(response => {

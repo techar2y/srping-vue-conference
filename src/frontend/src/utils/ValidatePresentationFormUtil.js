@@ -66,6 +66,7 @@ class ValidatePresentationFormUtil {
         }
 
         let presenter = context.presenters.find(x => x.id === context.selectedPresenterId);
+        context.currentPresentation.presenters = [];
         context.currentPresentation.presenters.push(presenter);
         context.validationPresenterInfo.value = true;
         return context.validationPresenterInfo.value;

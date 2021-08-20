@@ -19,12 +19,12 @@ VALUES (54), (27), (228);
 
 insert into presentations (description, room_id, subject, title, lasts, date, start_time) VALUES
     ('лекция', 1, 'math', 'заголовокMath', '04:15', '2021-06-08', '14:40'),
-    ('лекция', 1, 'math2', 'тема', '2:00', '2021-07-25', '13:00'),
-    ('лекция', 2, 'history', 'заголовокHistory', '1:30', '2021-07-18', '10:45'),
-    ('лекция', 3, 'bio', 'заголовокBio', '1:45', '2021-05-01', '16:00');
+    ('лекция', 1, 'math2', 'тема', '02:00', '2021-07-25', '13:00'),
+    ('лекция', 2, 'history', 'заголовокHistory', '01:30', '2021-07-18', '10:45'),
+    ('лекция', 3, 'bio', 'заголовокBio', '01:45', '2021-05-01', '16:00');
 
 insert into presentation_users(presentation_id, user_id) VALUES
-    (1, 1), (2, 2), (3, 1);
+    (1, 4), (2, 4), (3, 3);
 
 insert into user_roles (user_id, role_id) VALUES (1, 1), (2, 2), (3, 3), (4, 3);
 

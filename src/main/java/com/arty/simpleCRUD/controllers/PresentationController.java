@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/presentations")
 public class PresentationController
@@ -156,6 +156,18 @@ public class PresentationController
 
             return new ResponseEntity<>(response, HttpStatus.OK);
         } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/IsDateTimeUnique")
+    public ResponseEntity<String> isDateTimeUnique() {
+        try {
+
+
+
+            return new ResponseEntity<>("sad", HttpStatus.OK);
+        } catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

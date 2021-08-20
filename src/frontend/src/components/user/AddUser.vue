@@ -9,8 +9,7 @@
                         label-class="font-weight-bold pt-0"
                         class="mb-0"
                 >
-                    <b-form-group>
-                        <b-label>Полное имя</b-label>
+                    <b-form-group label="Полное имя" label-for="fullName">
                         <b-input-group size="sm" class="mb-2">
                             <b-input-group-prepend is-text>
                                 <b-icon icon="person-square"></b-icon>
@@ -33,8 +32,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label>Логин</b-label>
+                    <b-form-group label="Логин" label-for="username">
                         <b-input-group size="sm" class="mb-2">
                             <b-input-group-prepend is-text>
                                 <b-icon icon="at"></b-icon>
@@ -58,8 +56,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label>Email</b-label>
+                    <b-form-group label="Email" label-for="email">
                         <b-input-group size="sm" class="mb-2">
                             <b-input-group-prepend is-text>
                                 <b-icon icon="envelope"></b-icon>
@@ -83,8 +80,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label>Статус</b-label>
+                    <b-form-group label="Статус" label-for="role">
                         <b-form-select
                                 class="form-control"
                                 id="role"

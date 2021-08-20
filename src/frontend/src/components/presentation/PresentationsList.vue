@@ -147,7 +147,7 @@
                     .then(result => {
                         if (typeof result.data === 'undefined')
                             return;
-                        console.log(this.presentations);
+
                         this.presentations = typeof result.data.presentations !== 'undefined' ? result.data.presentations : {};
                         this.pageCount = typeof result.data.totalItems != 'undefined' ? result.data.totalItems : 0;
                         this.pending = false;
@@ -159,8 +159,8 @@
             },
             setActivePresentation(presentation, index) {
                 this.currentPresentation = presentation;
-                console.log(this.currentPresentation);
-                this.currentPresenter = this.currentPresentation.presenters.pop();
+
+                this.currentPresenter = this.currentPresentation.presenters.length > 0 ? this.currentPresentation.presenters[0] : "Не найден";
                 this.currentIndex = presentation ? index : -1;
             },
             deleteAllPresentations() {

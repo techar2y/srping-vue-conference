@@ -10,8 +10,7 @@
                         class="mb-0"
                 >
 
-                    <b-form-group>
-                        <b-label for="title">Тема доклада</b-label>
+                    <b-form-group label="Тема доклада" label-for="title">
                         <b-form-input
                                 type="text"
                                 id="title"
@@ -29,8 +28,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="subject">Предмет</b-label>
+                    <b-form-group label="Предмет" label-for="subject">
                         <b-form-input
                                 type="text"
                                 id="subject"
@@ -48,8 +46,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="teaxtarea">Описание</b-label>
+                    <b-form-group label="Описание" label-for="textarea">
                         <b-form-textarea
                                 id="textarea"
                                 name="textarea"
@@ -60,8 +57,7 @@
                         ></b-form-textarea>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="date">Дата доклада</b-label>
+                    <b-form-group label="Дата доклада" label-for="date">
                         <b-form-input
                                 type="date"
                                 id="date"
@@ -75,8 +71,7 @@
                         </b-form-invalid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="start_time">Время начало доклада:&nbsp;</b-label>
+                    <b-form-group label="Время начало доклада" label-for="start_time">
                         <b-form-input
                                 type="time"
                                 id="start_time"
@@ -91,8 +86,7 @@
                         </b-form-invalid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="lasts">Продолжительность доклада:&nbsp;</b-label>
+                    <b-form-group label="Продолжительность доклада" label-for="lasts">
                         <b-form-input
                                 type="time"
                                 id="lasts"
@@ -108,8 +102,7 @@
                         </b-form-invalid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="room">Аудитория</b-label>
+                    <b-form-group label="Аудитория" label-for="room">
                         <b-form-select
                                 id="room"
                                 name="room"
@@ -128,8 +121,7 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-form-group>
-                        <b-label for="presenter">Преподаватель</b-label>
+                    <b-form-group label="Преподаватель" label-for="presenter">
                         <b-form-select
                                 id="presenter"
                                 name="presenter"
@@ -189,7 +181,8 @@
                     room: {},
                     title: "",
                     date: "",
-                    presenters: []
+                    presenters: [],
+                    cmbFormPresenters: []
                 },
                 selectedRoomId: null,
                 rooms: [],
@@ -275,18 +268,18 @@
                 })
             }, getPresenters() {
                 return new Promise((resolve, reject) => {
-                    let status = "PRESENTER";
-                    UserDataService.getUsersByStatus(status)
+                    let role = "ROLE_PRESENTER";
+                    UserDataService.getUsersByUserRole(role)
                         .then(result => {
                             if (result.data.length === 0)
                                 return;
 
+                            this.presenters = result.data;
                             this.cmbFormPresenters.push({
                                 value: null,
-                                text: "Выберете ведущего доклада",
+                                text: "Выберете преподавателя для доклада",
                                 disabled: true
                             });
-                            this.presenters = result.data;
                             this.presenters.forEach(obj => {
                                 this.cmbFormPresenters.push({value: obj.id, text: obj.fullName});
                             });

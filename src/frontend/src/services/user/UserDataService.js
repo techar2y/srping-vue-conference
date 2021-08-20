@@ -25,7 +25,7 @@ class UserDataService {
     }
 
     updateUser(id, user) {
-        return http.put(`${this.API_URL}/updateUser/${id}`, user);
+        return http.put(`${API_URL}/updateUser/${id}`, user);
     }
 
     isUsernameUnique(username, id) {

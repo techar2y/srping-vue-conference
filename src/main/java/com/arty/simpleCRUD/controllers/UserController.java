@@ -16,7 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api/users")
 public class UserController
@@ -126,9 +126,9 @@ public class UserController
         }
     }
 
-    @GetMapping("/isLoginUnique")
+    @GetMapping("/isUsernameUnique")
     //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Integer> isLoginUnique(@RequestParam String username, @RequestParam Long id) {
+    public ResponseEntity<Integer> isUsernameUnique(@RequestParam String username, @RequestParam Long id) {
         try {
             List<User> users = userRepository.findUsersByUsernameAndIdNot(username, id);
 

@@ -12,8 +12,7 @@
                                     label-class="font-weight-bold pt-0"
                                     class="mb-0"
                             >
-                                <b-form-group>
-                                    <b-label>Полное имя</b-label>
+                                <b-form-group label="Полное имя" label-for="fullName">
                                     <b-input-group size="sm" class="mb-2">
                                         <b-input-group-prepend is-text>
                                             <b-icon icon="person-square"></b-icon>
@@ -38,8 +37,7 @@
                                     </b-form-valid-feedback>
                                 </b-form-group>
 
-                                <b-form-group>
-                                    <b-label>Логин</b-label>
+                                <b-form-group label="Логин" label-for="username">
                                     <b-input-group size="sm" class="mb-2">
                                         <b-input-group-prepend is-text>
                                             <b-icon icon="at"></b-icon>
@@ -64,8 +62,7 @@
                                     </b-form-valid-feedback>
                                 </b-form-group>
 
-                                <b-form-group>
-                                    <b-label>Email</b-label>
+                                <b-form-group label="Email" label-for="email">
                                     <b-input-group size="sm" class="mb-2">
                                         <b-input-group-prepend is-text>
                                             <b-icon icon="envelope"></b-icon>
@@ -90,14 +87,13 @@
                                     </b-form-valid-feedback>
                                 </b-form-group>
 
-                                <b-form-group>
-                                    <b-label>Статус</b-label>
+                                <b-form-group label="Статус" label-for="role">
                                     <b-form-select
                                             class="form-control"
                                             id="role"
                                             required
                                             v-model="selectedRoleId"
-                                            :options="roles"
+                                            :options="cmbFormRoles"
                                             :state="validationRoleInfo.value"
                                             name="role"
                                             placeholder="user's role"
@@ -173,6 +169,7 @@
                 updated: false,
                 selectedRoleId: null,
                 roles: [],
+                cmbFormRoles: [],
                 validationFullNameInfo: {valid: "", invalid: "", value: null},
                 validationUsernameInfo: {valid: "", invalid: "", value: null},
                 validationEmailInfo: {valid: "", invalid: "", value: null},
@@ -186,7 +183,7 @@
                     UserDataService.getUserById(id)
                         .then(result => {
                             this.currentUser = result.data;
-                            this.selectedRoleId = this.currentUser.role.id;
+                            this.selectedRoleId = this.currentUser.roles[0].id;
                             resolve(this.currentUser);
                         })
                         .catch(error => {
@@ -200,17 +197,12 @@
                     RoleDataService.getAllRoles()
                         .then(result => {
                             this.roles = result.data;
+                            this.cmbFormRoles.push({value: null, text: "Выберете статус пользователя", disabled: true});
+
                             this.roles.forEach(obj => {
-                                obj.value = obj.id;
-                                delete obj.id;
-                                obj.text = obj.status;
-                                delete obj.status;
+                                this.cmbFormRoles.push({value: obj.id, text: obj.name});
                             });
-                            this.roles.splice(0, 0, {
-                                value: null,
-                                text: "Выберете статус пользователя",
-                                disabled: true
-                            });
+                            console.log(this.cmbFormRoles);
                             resolve(this.roles);
                         })
                         .catch(error => {
@@ -229,7 +221,7 @@
                     });
             },
             updateUser(id, user) {
-                UserDataService.update(id, user)
+                UserDataService.updateUser(id, user)
                     .then(() => {
                         this.updated = true;
                         //setTimeout(() => this.updated = false, 3000);
@@ -254,7 +246,7 @@
             },
             async validateUsername() {
                 if (this.currentUser.username.length < 2) {
-                    this.validationUsernameInfo.invalid = "Логин не может стостоять меньше чем из двух символов";
+                    this.validationUsernameInfo.invalid = "Логин не может состоять меньше чем из двух символов";
                     this.validationUsernameInfo.value = false;
                     return this.validationUsernameInfo.value;
                 }
@@ -306,10 +298,12 @@
                     return this.validationFullNameInfo.value;
                 }
 
-                let role = this.roles.find(x => x.value === this.selectedRoleId);
-                this.currentUser.role.id = role.value;
-                this.currentUser.role.status = role.text;
-                this.currentUser.role.name = role.name;
+                console.log(this.roles);
+                console.log(this.selectedRoleId);
+                let role = this.roles.find(x => x.id === this.selectedRoleId);
+                this.currentUser.roles = [];
+                this.currentUser.roles.push(role);
+                console.log(this.currentUser.roles);
                 this.validationRoleInfo.value = true;
                 return this.validationFullNameInfo.value;
             },

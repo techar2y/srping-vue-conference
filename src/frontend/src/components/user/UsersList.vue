@@ -89,8 +89,8 @@
                     <div>
                         <label><strong>Логин:</strong></label> {{ currentUser.username }}
                     </div>
-                    <div>
-                        <label><strong>Статус:</strong></label> {{ currentUser.role.status }}
+                    <div v-for="role in currentUser.roles" :key="role.id">
+                        <label><strong>Статус:</strong></label> {{ role.name }}
                     </div>
 
                     <b-button v-bind:to="`/users/` + currentUser.id" class="btn btn-sm btn-warning"

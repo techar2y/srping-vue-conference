@@ -33,7 +33,7 @@ class PresentationDataService {
     }
 
     getPresentationsByRoom(room, params) {
-        return http.post(`${API_URL}/getByRoom`, room, {params: params} );
+        return http.post(`${API_URL}/getPresentationsByRoom`, room, {params: params} );
     }
 }
 
