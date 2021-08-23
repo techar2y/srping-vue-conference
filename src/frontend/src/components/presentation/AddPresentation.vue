@@ -140,10 +140,10 @@
                     </b-form-group>
 
 
-                    <b-button variant="success" style="margin: 10px 5px 0px"
+                    <b-button variant="outline-success" style="margin: 10px 5px 0px"
                               @click="createPresentation">Добавить
                     </b-button>
-                    <b-button to="/presentations" variant="danger" style="margin: 10px 5px 0px">Отмена
+                    <b-button to="/presentations" variant="outline-secondary" style="margin: 10px 5px 0px">Отмена
                     </b-button>
                     <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
                         {{ validationForm.invalid }}
@@ -268,7 +268,7 @@
                 })
             }, getPresenters() {
                 return new Promise((resolve, reject) => {
-                    let role = "ROLE_PRESENTER";
+                    let role = { name: "ROLE_PRESENTER" };
                     UserDataService.getUsersByUserRole(role)
                         .then(result => {
                             if (result.data.length === 0)

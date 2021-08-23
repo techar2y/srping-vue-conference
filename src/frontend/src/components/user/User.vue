@@ -202,7 +202,6 @@
                             this.roles.forEach(obj => {
                                 this.cmbFormRoles.push({value: obj.id, text: obj.name});
                             });
-                            console.log(this.cmbFormRoles);
                             resolve(this.roles);
                         })
                         .catch(error => {

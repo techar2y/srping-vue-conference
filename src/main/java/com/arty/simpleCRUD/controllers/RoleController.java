@@ -22,7 +22,7 @@ public class RoleController
     public IRoleRepository roleRepository;
 
     @GetMapping("/getAllRoles")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<List<Role>> getAllRoles() {
         try {
             List<Role> roles = roleRepository.findAll();

@@ -86,7 +86,7 @@
                                 id="role"
                                 required
                                 v-model="selectedRoleId"
-                                :options="roles"
+                                :options="cmbFormRoles"
                                 :state="validationRoleInfo.value"
                                 name="role"
                                 placeholder="user's role"
@@ -101,10 +101,10 @@
                         </b-form-valid-feedback>
                     </b-form-group>
 
-                    <b-button variant="success" style="margin: 10px 5px 0px"
+                    <b-button variant="outline-success" style="margin: 10px 5px 0px"
                               @click="createUser">Добавить
                     </b-button>
-                    <b-button to="/users" variant="danger" style="margin: 10px 5px 0px">Отмена
+                    <b-button to="/users" variant="outline-secondary" style="margin: 10px 5px 0px">Отмена
                     </b-button>
                     <b-form-invalid-feedback :state="validationForm.value" id="formInvalidFeedback">
                         {{ validationForm.invalid }}
@@ -140,6 +140,7 @@
                     role: {}
                 },
                 roles: [],
+                cmbFormRoles: [],
                 submitted: false,
                 validationFullNameInfo: {valid: "", invalid: "", value: null},
                 validationUsernameInfo: {valid: "", invalid: "", value: null},
@@ -167,10 +168,10 @@
                     })
             },
             newUser() {
+                this.getRoles();
                 this.submitted = false;
                 this.selectedRoleId = null;
                 this.currentUser = {id: -1, fullName: "", username: "", email: "", role: {}};
-                this.roles = this.getRoles();
                 this.submitted = false;
                 this.validationFullNameInfo = {valid: "", invalid: "", value: null};
                 this.validationUsernameInfo = {valid: "", invalid: "", value: null};
@@ -182,20 +183,11 @@
                 return new Promise((resolve, reject) => {
                     RoleDataService.getAllRoles()
                         .then(result => {
-                            if (result.data.length === 0)
-                                return;
-
                             this.roles = result.data;
+                            this.cmbFormRoles.push({value: null, text: "Выберете статус пользователя", disabled: true});
+
                             this.roles.forEach(obj => {
-                                obj.value = obj.id;
-                                delete obj.id;
-                                obj.text = obj.status;
-                                delete obj.status;
-                            });
-                            this.roles.splice(0, 0, {
-                                value: null,
-                                text: "Выберете статус пользователя",
-                                disabled: true
+                                this.cmbFormRoles.push({value: obj.id, text: obj.name});
                             });
                             resolve(this.roles);
                         })

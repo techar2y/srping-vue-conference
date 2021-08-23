@@ -12,10 +12,10 @@
                 </b-navbar-nav>
                 <b-navbar-nav v-if="!currentUser" class="ml-auto">
                     <b-nav-item to="/register">
-                        <font-awesome-icon icon="user-plus"/>Sign Up
+                        <font-awesome-icon icon="user-plus"/>Регистрация
                     </b-nav-item>
                     <b-nav-item to="/login">
-                        <font-awesome-icon icon="sign-in-alt" />Login
+                        <font-awesome-icon icon="sign-in-alt" />Войти
                     </b-nav-item>
                 </b-navbar-nav>
                 <b-navbar-nav v-if="currentUser" class="ml-auto">

@@ -1,5 +1,6 @@
 package com.arty.simpleCRUD.controllers;
 
+import com.arty.simpleCRUD.domains.ERole;
 import com.arty.simpleCRUD.domains.Role;
 import com.arty.simpleCRUD.domains.User;
 import com.arty.simpleCRUD.repos.IUserRepository;
@@ -25,7 +26,7 @@ public class UserController
     private IUserRepository userRepository;
 
     @GetMapping("/getAllUsers")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Map<String, Object>> getAllUsers(@RequestParam(required = false) String searchStr,
                                                            @RequestParam(defaultValue="0") int page,
                                                            @RequestParam(defaultValue="3") int pageSize){
@@ -55,7 +56,7 @@ public class UserController
     }
 
     @DeleteMapping("/deleteAllUsers")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteAllUsers(){
         try {
             userRepository.deleteAll();
@@ -66,7 +67,7 @@ public class UserController
     }
 
     @PostMapping("/createUser")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> createUser(@RequestBody User user){
         try {
             User _user = userRepository.save(user);
@@ -77,7 +78,7 @@ public class UserController
     }
 
     @GetMapping("/getUserById/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> getUserById(@PathVariable("id") Long id){
         try {
             User user = userRepository.getUserById(id);
@@ -92,7 +93,7 @@ public class UserController
     }
 
     @DeleteMapping("/deleteUserById/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> deleteUserById(@PathVariable("id") Long id){
         try {
             userRepository.deleteById(id);
@@ -104,7 +105,7 @@ public class UserController
     }
 
     @PutMapping("/updateUser/{id}")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<User> updateUser(@PathVariable("id") Long id, @RequestBody User user){
         try {
             User newUser = userRepository.getUserById(id);
@@ -127,7 +128,7 @@ public class UserController
     }
 
     @GetMapping("/isUsernameUnique")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Integer> isUsernameUnique(@RequestParam String username, @RequestParam Long id) {
         try {
             List<User> users = userRepository.findUsersByUsernameAndIdNot(username, id);
@@ -139,7 +140,7 @@ public class UserController
     }
 
     @GetMapping("/isEmailUnique")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Integer> isEmailUnique(@RequestParam String email, @RequestParam Long id) {
         try {
             List<User> users = userRepository.findUsersByEmailAndIdNot(email, id);
@@ -151,7 +152,7 @@ public class UserController
     }
 
     @PostMapping("/getUsersByUserRole")
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN') or hasRole('PRESENTER')")
     public ResponseEntity<List<User>> getUsersByUserRole(@RequestBody Role role) {
         try {
 

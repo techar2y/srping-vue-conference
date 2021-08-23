@@ -1,81 +1,81 @@
 <template>
-    <div class="col-md-12">
-        <div class="card card-container">
-            <img
-                    id="profile-img"
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    class="profile-img-card"
-            />
-            <form name="form" @submit.prevent="handleRegister">
-                <div v-if="!successful">
-                    <div class="form-group">
-                        <label>FullName</label>
-                        <input
-                                v-model="user.fullName"
-                                type="text"
-                                class="form-control"
-                                name="fullName"
-                        />
-                        <div
-                                v-if="submitted && errors.has('fullName')"
-                                class="alert-danger"
-                        >{{errors.first('fullName')}}</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Username</label>
-                        <input
-                                v-model="user.username"
-                                v-validate="'required|min:3|max:20'"
-                                type="text"
-                                class="form-control"
-                                name="username"
-                        />
-                        <div
-                                v-if="submitted && errors.has('username')"
-                                class="alert-danger"
-                        >{{errors.first('username')}}</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input
-                                v-model="user.email"
-                                v-validate="'required|email|max:50'"
-                                type="email"
-                                class="form-control"
-                                name="email"
-                        />
-                        <div
-                                v-if="submitted && errors.has('email')"
-                                class="alert-danger"
-                        >{{errors.first('email')}}</div>
-                    </div>
-                    <div class="form-group">
-                        <label>Password</label>
-                        <input
-                                v-model="user.password"
-                                v-validate="'required|min:6|max:40'"
-                                type="password"
-                                class="form-control"
-                                name="password"
-                        />
-                        <div
-                                v-if="submitted && errors.has('password')"
-                                class="alert-danger"
-                        >{{errors.first('password')}}</div>
-                    </div>
-                    <div class="form-group">
-                        <button class="btn btn-primary btn-block">Sign Up</button>
-                    </div>
-                </div>
-            </form>
+    <b-container class="card card-container">
+        <img
+                id="profile-img"
+                src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                class="profile-img-card"
+        />
 
-            <div
-                    v-if="message"
-                    class="alert"
-                    :class="successful ? 'alert-success' : 'alert-danger'"
-            >{{message}}</div>
-        </div>
-    </div>
+        <b-form name="form" @submit.prevent="handleRegister">
+            <div v-if="!successful">
+                <b-form-group label="Полное имя" label-for="fullname">
+                    <b-form-input
+                            v-model="user.fullname"
+                            v-validate="'required'"
+                            type="text"
+                            class="form-control"
+                            name="fullname"
+                    />
+                    <div
+                            v-if="errors.has('fullname')"
+                            class="alert alert-danger"
+                            role="alert"
+                    >Нужно заполнить ФИО!
+                    </div>
+                </b-form-group>
+
+                <b-form-group label="Имя пользователя" label-for="username">
+                    <b-form-input
+                            v-model="user.username"
+                            v-validate="'required'"
+                            type="text"
+                            class="form-control"
+                            name="username"
+                    />
+                    <div
+                            v-if="errors.has('username')"
+                            class="alert alert-danger"
+                            role="alert"
+                    >Задайте имя пользователя!
+                    </div>
+                </b-form-group>
+
+                <b-form-group label="Email" label-for="email">
+                    <b-form-input
+                            v-model="user.email"
+                            v-validate="'required'"
+                            type="text"
+                            class="form-control"
+                            name="email"
+                    />
+                    <div
+                            v-if="errors.has('email')"
+                            class="alert alert-danger"
+                            role="alert"
+                    >Введите почту!
+                    </div>
+                </b-form-group>
+
+                <b-form-group label="Пароль" label-for="password">
+                    <b-form-input
+                            v-model="user.password"
+                            v-validate="'required'"
+                            type="password"
+                            class="form-control"
+                            name="password"
+                    />
+                    <div
+                            v-if="errors.has('password')"
+                            class="alert alert-danger"
+                            role="alert"
+                    >Password is required!
+                    </div>
+                </b-form-group>
+
+                <b-button block variant="primary">Зарегистрироваться</b-button>
+            </div>
+        </b-form>
+    </b-container>
 </template>
 
 <script>

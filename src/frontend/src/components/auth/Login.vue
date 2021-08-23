@@ -1,54 +1,45 @@
 <template>
-    <div class="col-md-12">
-        <div class="card card-container">
-            <img
-                    id="profile-img"
-                    src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
-                    class="profile-img-card"
-            />
-            <form name="form" @submit.prevent="handleUsername">
-                <div class="form-group">
-                    <b-label for="username">Username</b-label>
-                    <b-form-input
-                            v-model="user.username"
-                            v-validate="'required'"
-                            type="text"
-                            class="form-control"
-                            name="username"
-                    />
-                    <div
-                            v-if="errors.has('username')"
-                            class="alert alert-danger"
-                            role="alert"
-                    >Username is required!</div>
-                </div>
-                <div class="form-group">
-                    <b-label for="password">Password</b-label>
-                    <b-form-input
-                            v-model="user.password"
-                            v-validate="'required'"
-                            type="password"
-                            class="form-control"
-                            name="password"
-                    />
-                    <div
-                            v-if="errors.has('password')"
-                            class="alert alert-danger"
-                            role="alert"
-                    >Password is required!</div>
-                </div>
-                <div class="form-group">
-                    <button class="btn btn-primary btn-block" :disabled="loading">
-                        <span v-show="loading" class="spinner-border spinner-border-sm"></span>
-                        <span>Login</span>
-                    </button>
-                </div>
-                <div class="form-group">
-                    <div v-if="message" class="alert alert-danger" role="alert">{{message}}</div>
-                </div>
-            </form>
-        </div>
-    </div>
+    <b-container class="card card-container">
+        <img
+                id="profile-img"
+                src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+                class="profile-img-card"
+        />
+        <b-form name="form" @submit.prevent="handleUsername">
+            <b-form-group label="Имя пользователя" label-for="username">
+                <b-form-input
+                        v-model="user.username"
+                        v-validate="'required'"
+                        type="text"
+                        class="form-control"
+                        name="username"
+                />
+                <div
+                        v-if="errors.has('username')"
+                        class="alert alert-danger"
+                        role="alert"
+                >Username is required!</div>
+            </b-form-group>
+
+            <b-form-group label="Пароль" label-for="password">
+                <b-form-input
+                        v-model="user.password"
+                        v-validate="'required'"
+                        type="password"
+                        class="form-control"
+                        name="password"
+                />
+                <div
+                        v-if="errors.has('password')"
+                        class="alert alert-danger"
+                        role="alert"
+                >Password is required!</div>
+            </b-form-group>
+
+            <b-button block variant="primary">Войти</b-button>
+        </b-form>
+    </b-container>
+
 </template>
 
 <script>

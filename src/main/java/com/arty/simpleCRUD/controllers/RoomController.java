@@ -21,7 +21,7 @@ public class RoomController
     @Autowired
     private IRoomRepository roomRepository;
 
-    //@PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/getAllRooms")
     public ResponseEntity<List<Room>> getAllRooms() {
         try {
