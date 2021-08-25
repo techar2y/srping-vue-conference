@@ -121,6 +121,7 @@
 
 <script>
     import PresentationDataService from "../../services/PresentationDataService";
+    import EventService from "../../services/event-service";
 
     export default {
         name: "presentations-list",
@@ -151,6 +152,15 @@
                         this.presentations = typeof result.data.presentations !== 'undefined' ? result.data.presentations : {};
                         this.pageCount = typeof result.data.totalItems != 'undefined' ? result.data.totalItems : 0;
                         this.pending = false;
+                    }, error => {
+                        this.content =
+                            (error.response && error.response.data && error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+
+                        if (error.response && error.response.status === 401) {
+                            EventService.dispatch("logout");
+                        }
                     })
                     .catch(e => {
                         this.pending = false;

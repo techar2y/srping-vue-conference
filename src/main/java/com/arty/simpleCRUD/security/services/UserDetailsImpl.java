@@ -4,6 +4,7 @@ package com.arty.simpleCRUD.security.services;
 import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -28,7 +29,7 @@ public class UserDetailsImpl implements UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
 
     public UserDetailsImpl(Long id, String login, String email, String password,
-                           Collection<? extends GrantedAuthority> authorities) {
+                           List<GrantedAuthority> authorities) {
         this.id = id;
         this.login = login;
         this.email = email;

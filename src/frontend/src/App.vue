@@ -4,7 +4,7 @@
             <b-navbar variant="dark" type="dark">
                 <b-navbar-nav>
                     <b-navbar-brand to="/">
-                        <font-awesome-icon icon="home" />
+                        <font-awesome-icon icon="home" /> Home
                     </b-navbar-brand>
                     <b-nav-item v-if="currentUser != null" to="/schedules">Расписание</b-nav-item>
                     <b-nav-item v-if="hasRoleAdmin || hasRolePresenter" to="/presentations">Доклады</b-nav-item>
@@ -36,6 +36,8 @@
 </template>
 
 <script>
+    import EventService from './services/event-service'
+
     const ROLE_ADMIN = 'ROLE_ADMIN';
     const ROLE_PRESENTER = 'ROLE_PRESENTER';
 
@@ -64,7 +66,22 @@
             logOut() {
                 this.$store.dispatch('auth/logout');
                 this.$router.push('/login');
+            },
+            notFound() {
+                this.$router.push('/notFound');
             }
+        },
+        mounted() {
+            EventService.on("logout", () => {
+                this.logOut();
+            });
+
+            EventService.on("notFound", () => {
+                this.notFound();
+            });
+        },
+        beforeUnmount() {
+            EventService.remove("logout");
         }
     };
 </script>

@@ -13,6 +13,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
+import interceptors from './services/axiosInterceptors'
 
 import { BootstrapVue, BootstrapVueIcons  } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -37,6 +38,8 @@ Vue.component('font-awesome-icon', FontAwesomeIcon);
 Vue.config.devtools = true;
 Vue.use(BootstrapVue);
 Vue.use(BootstrapVueIcons);
+
+interceptors(store);
 
 new Vue({
     router,

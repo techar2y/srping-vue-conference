@@ -111,6 +111,7 @@
 
 <script>
     import UserDataService from "../../services/user/UserDataService";
+    //import EventService from "../../services/event-service";
 
     export default {
         name: "users-list",
@@ -142,7 +143,16 @@
                             result.data.totalItems : 0;
 
                         this.pending = false;
-                    })
+                    }/*, error => {
+                        this.content =
+                            (error.response && error.response.data && error.response.data.message) ||
+                            error.message ||
+                            error.toString();
+
+                        if (error.response && error.response.status === 401) {
+                            EventService.dispatch("logout");
+                        }
+                    }*/)
                     .catch(e => {
                         this.pending = false;
                         console.log(e);

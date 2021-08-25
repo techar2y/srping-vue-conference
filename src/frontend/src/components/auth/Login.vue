@@ -36,8 +36,14 @@
                 >Password is required!</div>
             </b-form-group>
 
-            <b-button block variant="primary">Войти</b-button>
+            <b-button block variant="primary" @click="handleUsername">Войти</b-button>
         </b-form>
+
+        <b-alert show class="mt-3 mb-0">
+            <p>Listener - Username: listener, Password: listener</p>
+            <p>Presenter - Username: presenter, Password: presenter</p>
+            <p>Administrator - Username: admin, Password: admin</p>
+        </b-alert>
     </b-container>
 
 </template>

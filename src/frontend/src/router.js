@@ -104,6 +104,11 @@ let router = new Router({
             path: "/register",
             name: "register",
             component: () => import("./components/auth/Register")
+        },
+        {
+            path: "/notFound",
+            name: "notFound",
+            component: () => import("./components/NotFound")
         }
     ]
 
