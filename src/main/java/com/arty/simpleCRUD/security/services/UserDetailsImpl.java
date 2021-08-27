@@ -1,12 +1,9 @@
 package com.arty.simpleCRUD.security.services;
 
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
+import com.arty.simpleCRUD.domains.Role;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,26 +25,41 @@ public class UserDetailsImpl implements UserDetails {
 
     private Collection<? extends GrantedAuthority> authorities;
 
-    public UserDetailsImpl(Long id, String login, String email, String password,
-                           List<GrantedAuthority> authorities) {
+    private Set<Role> roles;
+
+    public UserDetailsImpl(Long id, String login, String email, String password, Set<Role> roles,
+                           Set<SimpleGrantedAuthority> authorities) {
         this.id = id;
         this.login = login;
         this.email = email;
         this.password = password;
+        this.roles = roles;
         this.authorities = authorities;
     }
 
     public static UserDetailsImpl build(User user) {
-        List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
-                .collect(Collectors.toList());
+        Set<SimpleGrantedAuthority> authorities = new HashSet<>();
+        user.getRoles().stream().forEach(role -> role.getName().getAuthorities()
+                .stream().forEach(authority -> Collections.addAll(authorities, authority)));
+
 
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
                 user.getPassword(),
+                user.getRoles(),
                 authorities);
+    }
+
+    public Set<Role> getRoles()
+    {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles)
+    {
+        this.roles = roles;
     }
 
     @Override

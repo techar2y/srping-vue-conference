@@ -38,8 +38,8 @@
 <script>
     import EventService from './services/event-service'
 
-    const ROLE_ADMIN = 'ROLE_ADMIN';
-    const ROLE_PRESENTER = 'ROLE_PRESENTER';
+    const ROLE_ADMIN = 'ADMIN';
+    const ROLE_PRESENTER = 'PRESENTER';
 
     export default {
         name: "app",

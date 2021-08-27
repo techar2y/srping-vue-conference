@@ -1,7 +1,7 @@
 insert into roles (name) VALUES
-    ('ROLE_ADMIN'),
-    ('ROLE_USER'),
-    ('ROLE_PRESENTER');
+    ('ADMIN'),
+    ('USER'),
+    ('PRESENTER');
 
 insert into users (email, full_name, username, password) VALUES
     ('example@post.org',	'Peter Parker', 'spiderman', '$2a$12$yOjP4l62G7pGJnlMsHnkfet5KKD9rAkffHE.Yd3QDTrUHkgnhK4G.'),
@@ -25,5 +25,5 @@ insert into presentations (description, room_id, subject, title, lasts, date, st
 insert into presentation_users(presentation_id, user_id) VALUES
     (1, 4), (2, 4), (3, 3);
 
-insert into user_roles (user_id, role_id) VALUES (1, 1), (2, 2), (3, 3), (4, 3);
+insert into user_roles (user_id, role_id) VALUES (1, 1), (2, 2), (3, 3), (4, 3), (5, 2), (6, 3), (7, 1);
 

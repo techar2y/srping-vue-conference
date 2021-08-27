@@ -8,8 +8,8 @@ public enum EPermission
     ROOM_WRITE("room:write"),
     PRESENTATION_READ("presentation:read"),
     PRESENTATION_WRITE("presentation:write"),
-    SCHEDULE_READ("schedule:read"),
-    SCHEDULE_WRITE("schedule:write");
+    ROLE_READ("role:read"),
+    ROLE_WRITE("role:write");
 
     private final String permission;
 

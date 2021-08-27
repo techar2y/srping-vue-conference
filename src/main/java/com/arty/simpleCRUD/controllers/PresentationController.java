@@ -25,7 +25,7 @@ public class PresentationController
     private IPresentationRepository presentationRepository;
 
     @GetMapping("/getAllPresentations")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:read')")
     public ResponseEntity<Map<String, Object>> getAllPresentations(@RequestParam(required = false) String searchStr,
                                                                  @RequestParam(defaultValue="0") int page,
                                                                  @RequestParam(defaultValue="3") int pageSize){
@@ -56,7 +56,7 @@ public class PresentationController
     }
 
     @DeleteMapping("/deleteAllPresentations")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:write')")
     public ResponseEntity<Presentation> deleteAllPresentations(){
         try {
             presentationRepository.deleteAll();
@@ -67,7 +67,7 @@ public class PresentationController
     }
 
     @PostMapping("/createPresentation")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:write')")
     public ResponseEntity<Presentation> createPresentation(@RequestBody Presentation presentation){
         try {
             Presentation _presentation = presentationRepository.save(presentation);
@@ -78,7 +78,7 @@ public class PresentationController
     }
 
     @GetMapping("/getPresentationById/{id}")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:read')")
     public ResponseEntity<Presentation> getPresentationById(@PathVariable("id") Long id){
         try {
             Presentation presentation = presentationRepository.getById(id);
@@ -93,7 +93,7 @@ public class PresentationController
     }
 
     @DeleteMapping("/deletePresentationById/{id}")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:write')")
     public ResponseEntity<Presentation> deletePresentationById(@PathVariable("id") Long id){
         try {
             presentationRepository.deleteById(id);
@@ -105,7 +105,7 @@ public class PresentationController
     }
 
     @PutMapping("/updatePresentation/{id}")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:write')")
     public ResponseEntity<Presentation> updatePresentation(@PathVariable("id") Long id, @RequestBody Presentation presentation){
         try {
             Presentation newPresentation = presentationRepository.getById(id);
@@ -132,7 +132,7 @@ public class PresentationController
     }
 
     @PostMapping("/getPresentationsByRoom")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:read')")
     public ResponseEntity<Map<String, Object>> getPresentationsByRoom(@RequestBody Room room,
                                                                       @RequestParam(defaultValue="0") int page,
                                                                      @RequestParam(defaultValue="10") int pageSize) {
@@ -161,12 +161,9 @@ public class PresentationController
     }
 
     @GetMapping("/IsDateTimeUnique")
-    @PreAuthorize("hasRole('PRESENTER') or hasRole('ADMIN')")
+    @PreAuthorize("hasAuthority('presentation:read')")
     public ResponseEntity<String> isDateTimeUnique() {
         try {
-
-
-
             return new ResponseEntity<>("sad", HttpStatus.OK);
         } catch (Exception ex) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);

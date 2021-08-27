@@ -191,6 +191,7 @@
     import ValidatePresentationFormUtil from "../../utils/ValidatePresentationFormUtil";
     import UserDataService from "../../services/user/UserDataService";
 
+    const ROLE_PRESENTER = { name: "PRESENTER" };
 
     export default {
         name: "presentation-edit",
@@ -285,8 +286,7 @@
                     });
             }, getPresenters() {
                 return new Promise((resolve, reject) => {
-                    let role = { name: "ROLE_PRESENTER" };
-                    UserDataService.getUsersByUserRole(role)
+                    UserDataService.getUsersByUserRole(ROLE_PRESENTER)
                         .then(result => {
                             if (result.data.length === 0)
                                 return;
