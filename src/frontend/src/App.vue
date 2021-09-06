@@ -19,7 +19,7 @@
                     </b-nav-item>
                 </b-navbar-nav>
                 <b-navbar-nav v-if="currentUser" class="ml-auto">
-                    <b-nav-item to="/profile">
+                    <b-nav-item>
                         <font-awesome-icon icon="user" /> {{ currentUser.username }}
                     </b-nav-item>
                     <b-nav-item @click.prevent="logOut">

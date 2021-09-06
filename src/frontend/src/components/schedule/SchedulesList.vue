@@ -28,8 +28,8 @@
         </b-row>
         <b-row align-h="center">
             <b-col sm="10">
-                <b-table striped hover bordered
-                         :items="items" :fields="flds" variant="dark"  class="content"></b-table>
+                <b-table hover
+                         :items="items" :fields="flds" variant="dark"></b-table>
             </b-col>
         </b-row>
     </b-container>
@@ -123,6 +123,6 @@
 
 <style scoped>
     .content {
-        background-color: #f3f3f3;
+        background-color: #78c9ff;
     }
 </style>

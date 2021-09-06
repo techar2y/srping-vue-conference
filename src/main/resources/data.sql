@@ -23,7 +23,7 @@ insert into presentations (description, room_id, subject, title, lasts, date, st
     ('лекция', 3, 'bio', 'заголовокBio', '01:45', '2021-05-01', '16:00');
 
 insert into presentation_users(presentation_id, user_id) VALUES
-    (1, 4), (2, 4), (3, 3);
+    (1, 4), (2, 4), (3, 3), (4, 6);
 
 insert into user_roles (user_id, role_id) VALUES (1, 1), (2, 2), (3, 3), (4, 3), (5, 2), (6, 3), (7, 1);
 

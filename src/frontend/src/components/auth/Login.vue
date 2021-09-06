@@ -40,9 +40,18 @@
         </b-form>
 
         <b-alert show class="mt-3 mb-0">
-            <p>Listener - Username: listener, Password: listener</p>
-            <p>Presenter - Username: presenter, Password: presenter</p>
-            <p>Administrator - Username: admin, Password: admin</p>
+            <p>Listener:
+                <br>Username - listener,
+                <br>Password - listener
+            </p>
+            <p>Presenter:
+                <br>Username - presenter,
+                <br>Password - presenter
+            </p>
+            <p>Administrator:
+                <br>Username: admin,
+                <br>Password: admin
+            </p>
         </b-alert>
     </b-container>
 
@@ -52,7 +61,7 @@
     import User from '../../models/User';
 
     export default {
-        name: 'username',
+        name: 'login',
         data() {
             return {
                 user: new User('', '', '', ''),
